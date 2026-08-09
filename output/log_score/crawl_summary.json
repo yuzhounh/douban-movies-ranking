@@ -1,0 +1,160 @@
+{
+  "generated_at": "2026-08-09T16:52:13+08:00",
+  "source_count": 21,
+  "raw_record_count": 9957,
+  "unique_record_count": 7877,
+  "ranking": {
+    "method": "quality_times_log_popularity",
+    "formula": "(rating - delta) * ln(rating_count)",
+    "delta": 2.5
+  },
+  "sources": [
+    {
+      "id": "240962",
+      "name": "豆瓣高分电影榜（上）9.7-8.6分",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/240962/",
+      "extracted_records": 641
+    },
+    {
+      "id": "243559",
+      "name": "豆瓣高分电影榜（中）8.5-8.3分",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/243559/",
+      "extracted_records": 631
+    },
+    {
+      "id": "248893",
+      "name": "豆瓣高分电影榜（下）8.2-8.0分",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/248893/",
+      "extracted_records": 717
+    },
+    {
+      "id": "42966583",
+      "name": "评分人数超过5万且评分高于7分的电影",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/42966583/",
+      "extracted_records": 2136
+    },
+    {
+      "id": "16163",
+      "name": "容易忽视的国产电影",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/16163/",
+      "extracted_records": 215
+    },
+    {
+      "id": "13922",
+      "name": "豆瓣冷门佳片 10-8.5分（评价人数少于5000）",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/13922/",
+      "extracted_records": 265
+    },
+    {
+      "id": "249029",
+      "name": "豆瓣冷门佳片 8.4-8.0分（评价人数少于5000）",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/249029/",
+      "extracted_records": 340
+    },
+    {
+      "id": "223273",
+      "name": "豆瓣高分纪录片/其它（1/2）",
+      "kind": "纪录片",
+      "url": "https://www.douban.com/doulist/223273/",
+      "extracted_records": 76
+    },
+    {
+      "id": "480634",
+      "name": "豆瓣高分纪录片/其它（2/2）",
+      "kind": "纪录片",
+      "url": "https://www.douban.com/doulist/480634/",
+      "extracted_records": 137
+    },
+    {
+      "id": "223781",
+      "name": "豆瓣高分动画长片",
+      "kind": "动画电影",
+      "url": "https://www.douban.com/doulist/223781/",
+      "extracted_records": 392
+    },
+    {
+      "id": "222008",
+      "name": "豆瓣高分短片（评价人数较多）",
+      "kind": "短片",
+      "url": "https://www.douban.com/doulist/222008/",
+      "extracted_records": 327
+    },
+    {
+      "id": "11192",
+      "name": "豆瓣高分短片（评价人数少于1000）",
+      "kind": "短片",
+      "url": "https://www.douban.com/doulist/11192/",
+      "extracted_records": 100
+    },
+    {
+      "id": "46375658",
+      "name": "豆瓣电视剧排行榜",
+      "kind": "电视剧",
+      "url": "https://www.douban.com/doulist/46375658/",
+      "extracted_records": 639
+    },
+    {
+      "id": "644440",
+      "name": "9分电视剧",
+      "kind": "电视剧",
+      "url": "https://www.douban.com/doulist/644440/",
+      "extracted_records": 604
+    },
+    {
+      "id": "172901",
+      "name": "豆瓣五星电视剧（1/2）",
+      "kind": "电视剧",
+      "url": "https://www.douban.com/doulist/172901/",
+      "extracted_records": 247
+    },
+    {
+      "id": "430230",
+      "name": "豆瓣五星电视剧（2/2）",
+      "kind": "电视剧",
+      "url": "https://www.douban.com/doulist/430230/",
+      "extracted_records": 133
+    },
+    {
+      "id": "225067",
+      "name": "豆瓣五星动画剧集",
+      "kind": "动画剧集",
+      "url": "https://www.douban.com/doulist/225067/",
+      "extracted_records": 230
+    },
+    {
+      "id": "146202362",
+      "name": "豆瓣高分国产剧",
+      "kind": "国产剧",
+      "url": "https://www.douban.com/doulist/146202362/",
+      "extracted_records": 615
+    },
+    {
+      "id": "156283469",
+      "name": "豆瓣高分日剧",
+      "kind": "日剧",
+      "url": "https://www.douban.com/doulist/156283469/",
+      "extracted_records": 595
+    },
+    {
+      "id": "135940451",
+      "name": "豆瓣高分港剧",
+      "kind": "港剧",
+      "url": "https://www.douban.com/doulist/135940451/",
+      "extracted_records": 464
+    },
+    {
+      "id": "137843346",
+      "name": "豆瓣高分悬疑探案剧",
+      "kind": "悬疑剧",
+      "url": "https://www.douban.com/doulist/137843346/",
+      "extracted_records": 453
+    }
+  ]
+}

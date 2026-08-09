@@ -1,0 +1,154 @@
+{
+  "doulists": [
+    {
+      "id": "240962",
+      "name": "豆瓣高分电影榜（上）9.7-8.6分",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/240962/",
+      "enabled": true
+    },
+    {
+      "id": "243559",
+      "name": "豆瓣高分电影榜（中）8.5-8.3分",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/243559/",
+      "enabled": true
+    },
+    {
+      "id": "248893",
+      "name": "豆瓣高分电影榜（下）8.2-8.0分",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/248893/",
+      "enabled": true
+    },
+    {
+      "id": "42966583",
+      "name": "评分人数超过5万且评分高于7分的电影",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/42966583/",
+      "enabled": true
+    },
+    {
+      "id": "16163",
+      "name": "容易忽视的国产电影",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/16163/",
+      "enabled": true
+    },
+    {
+      "id": "13922",
+      "name": "豆瓣冷门佳片 10-8.5分（评价人数少于5000）",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/13922/",
+      "enabled": true
+    },
+    {
+      "id": "249029",
+      "name": "豆瓣冷门佳片 8.4-8.0分（评价人数少于5000）",
+      "kind": "电影",
+      "url": "https://www.douban.com/doulist/249029/",
+      "enabled": true
+    },
+    {
+      "id": "223273",
+      "name": "豆瓣高分纪录片/其它（1/2）",
+      "kind": "纪录片",
+      "url": "https://www.douban.com/doulist/223273/",
+      "enabled": true
+    },
+    {
+      "id": "480634",
+      "name": "豆瓣高分纪录片/其它（2/2）",
+      "kind": "纪录片",
+      "url": "https://www.douban.com/doulist/480634/",
+      "enabled": true
+    },
+    {
+      "id": "223781",
+      "name": "豆瓣高分动画长片",
+      "kind": "动画电影",
+      "url": "https://www.douban.com/doulist/223781/",
+      "enabled": true
+    },
+    {
+      "id": "222008",
+      "name": "豆瓣高分短片（评价人数较多）",
+      "kind": "短片",
+      "url": "https://www.douban.com/doulist/222008/",
+      "enabled": true
+    },
+    {
+      "id": "11192",
+      "name": "豆瓣高分短片（评价人数少于1000）",
+      "kind": "短片",
+      "url": "https://www.douban.com/doulist/11192/",
+      "enabled": true
+    },
+    {
+      "id": "46375658",
+      "name": "豆瓣电视剧排行榜",
+      "kind": "电视剧",
+      "url": "https://www.douban.com/doulist/46375658/",
+      "enabled": true
+    },
+    {
+      "id": "644440",
+      "name": "9分电视剧",
+      "kind": "电视剧",
+      "url": "https://www.douban.com/doulist/644440/",
+      "enabled": true
+    },
+    {
+      "id": "172901",
+      "name": "豆瓣五星电视剧（1/2）",
+      "kind": "电视剧",
+      "url": "https://www.douban.com/doulist/172901/",
+      "enabled": true
+    },
+    {
+      "id": "430230",
+      "name": "豆瓣五星电视剧（2/2）",
+      "kind": "电视剧",
+      "url": "https://www.douban.com/doulist/430230/",
+      "enabled": true
+    },
+    {
+      "id": "225067",
+      "name": "豆瓣五星动画剧集",
+      "kind": "动画剧集",
+      "url": "https://www.douban.com/doulist/225067/",
+      "enabled": true
+    },
+    {
+      "id": "146202362",
+      "name": "豆瓣高分国产剧",
+      "kind": "国产剧",
+      "url": "https://www.douban.com/doulist/146202362/",
+      "enabled": true
+    },
+    {
+      "id": "156283469",
+      "name": "豆瓣高分日剧",
+      "kind": "日剧",
+      "url": "https://www.douban.com/doulist/156283469/",
+      "enabled": true
+    },
+    {
+      "id": "135940451",
+      "name": "豆瓣高分港剧",
+      "kind": "港剧",
+      "url": "https://www.douban.com/doulist/135940451/",
+      "enabled": true
+    },
+    {
+      "id": "137843346",
+      "name": "豆瓣高分悬疑探案剧",
+      "kind": "悬疑剧",
+      "url": "https://www.douban.com/doulist/137843346/",
+      "enabled": true
+    }
+  ],
+  "ranking": {
+    "delta": 2.5
+  }
+}
