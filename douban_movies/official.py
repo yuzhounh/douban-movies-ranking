@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-import json
 import hashlib
+import json
 import logging
 import re
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from urllib.parse import parse_qs, urlencode, urljoin, urlparse
 
@@ -31,6 +32,7 @@ def _source_record(
     rating_count: int,
     source_id: str,
     source_name: str,
+    kind: str = "电影",
     genres: set[str] | None = None,
 ) -> MovieRecord:
     return MovieRecord(
@@ -39,7 +41,7 @@ def _source_record(
         rating=rating,
         rating_count=rating_count,
         url=f"https://movie.douban.com/subject/{subject_id}/",
-        kinds={"电影"},
+        kinds={kind},
         source_ids={source_id},
         source_names={source_name},
         genres=genres or set(),
@@ -145,11 +147,12 @@ def parse_explore_items(
     *,
     source_id: str,
     source_name: str,
+    support_type: str = "movie",
     selected_genre: str | None = None,
 ) -> list[MovieRecord]:
     records: list[MovieRecord] = []
     for item in items:
-        if item.get("type") != "movie" or not item.get("id"):
+        if item.get("type") != support_type or not item.get("id"):
             continue
         rating_data = item.get("rating") or {}
         try:
@@ -170,6 +173,7 @@ def parse_explore_items(
                 rating_count=rating_count,
                 source_id=source_id,
                 source_name=source_name,
+                kind="电影" if support_type == "movie" else "剧集",
                 genres=genres,
             )
         )
@@ -263,6 +267,9 @@ class OfficialSourcesCrawler:
                     "kind": "电影",
                     "url": category_url,
                     "extracted_records": len(category_records),
+                    "navigation": self._navigation(
+                        "分类排行榜", "类型排行榜", "类型", category.name
+                    ),
                 }
             )
         return all_records, summaries
@@ -291,12 +298,35 @@ class OfficialSourcesCrawler:
                 "kind": "电影",
                 "url": base_url,
                 "extracted_records": len(records),
+                "navigation": self._navigation(
+                    "分类排行榜", "Top 250", "榜单", "Top 250"
+                ),
             }
         ]
+
+    @staticmethod
+    def _navigation(
+        section: str,
+        tab: str,
+        filter_name: str,
+        value: str,
+        *,
+        group: str | None = None,
+    ) -> dict[str, str]:
+        navigation = {
+            "section": section,
+            "tab": tab,
+            "filter": filter_name,
+            "value": value,
+        }
+        if group:
+            navigation["group"] = group
+        return navigation
 
     def _explore_payload(
         self,
         *,
+        support_type: str,
         cache_key: str,
         selected_categories: dict[str, str],
         tags: list[str],
@@ -305,11 +335,13 @@ class OfficialSourcesCrawler:
         sort: str | None = None,
     ) -> dict:
         params: dict[str, object] = {
-            "type": "movie",
+            "type": support_type,
             "refresh": 0,
             "start": start,
             "count": count,
-            "selected_categories": json.dumps(selected_categories, ensure_ascii=False, separators=(",", ":")),
+            "selected_categories": json.dumps(
+                selected_categories, ensure_ascii=False, separators=(",", ":")
+            ),
             "uncollect": "false",
             "score_range": "0,10",
         }
@@ -317,27 +349,54 @@ class OfficialSourcesCrawler:
             params["tags"] = ",".join(tags)
         if sort:
             params["sort"] = sort
-        url = self._url("https://m.douban.com/rexxar/api/v2/movie/recommend", params)
+        url = self._url(
+            f"https://m.douban.com/rexxar/api/v2/{support_type}/recommend",
+            params,
+        )
+        page_url = (
+            "https://movie.douban.com/explore"
+            if support_type == "movie"
+            else "https://movie.douban.com/tv/"
+        )
         payload = self.crawler.get_json(
             cache_key,
             url,
-            headers={**self.json_headers, "Referer": "https://movie.douban.com/explore"},
+            headers={**self.json_headers, "Referer": page_url},
         )
         if not isinstance(payload, dict):
-            raise ParseError("选电影接口结构异常")
+            raise ParseError(f"{support_type} 推荐接口结构异常")
         return payload
 
     def _crawl_explore_filter(
         self,
         *,
-        facet_type: str,
+        support_type: str,
+        page_url: str,
+        section: str,
+        tab: str,
+        filter_name: str,
         value: str,
+        group: str | None,
         selected_categories: dict[str, str],
+        tags: list[str],
+        sort: str | None,
         page_size: int,
         max_items: int,
         max_pages: int | None,
     ) -> tuple[list[MovieRecord], dict]:
-        safe_id = self._stable_id(facet_type, value)
+        source_hash = self._stable_id(
+            support_type, tab, filter_name, group or "", value
+        )
+        source_id = f"explore:{support_type}:{source_hash}"
+        path = "/".join(part for part in (tab, filter_name, group, value) if part)
+        source_name = f"{section}：{path}"
+        query_hash = self._stable_id(
+            "query",
+            support_type,
+            json.dumps(selected_categories, ensure_ascii=False, sort_keys=True),
+            ",".join(tags),
+            sort or "",
+        )
         records: list[MovieRecord] = []
         start = 0
         page_number = 0
@@ -348,27 +407,38 @@ class OfficialSourcesCrawler:
             page_number += 1
             count = min(page_size, max_items - start)
             payload = self._explore_payload(
-                cache_key=f"official/explore_{safe_id}_start_{start}.json",
+                support_type=support_type,
+                cache_key=f"official/explore_{query_hash}_start_{start}.json",
                 selected_categories=selected_categories,
-                tags=[value],
+                tags=tags,
                 start=start,
                 count=count,
+                sort=sort,
             )
             total = int(payload.get("total") or 0)
             items = payload.get("items") or []
             if not isinstance(items, list):
-                raise ParseError(f"选电影条目结构异常：{facet_type}={value}")
+                raise ParseError(f"{section}条目结构异常：{path}")
+            selected_genre = None
+            if filter_name == "类型" and value not in {
+                "全部",
+                "不限类型",
+                "全部剧集",
+                "全部综艺",
+            }:
+                selected_genre = value
             page_records = parse_explore_items(
                 items,
-                source_id=f"explore:{facet_type}:{value}",
-                source_name=f"选电影：{facet_type}={value}",
-                selected_genre=value if facet_type == "类型" else None,
+                source_id=source_id,
+                source_name=source_name,
+                support_type=support_type,
+                selected_genre=selected_genre,
             )
             records.extend(page_records)
             LOGGER.info(
-                "选电影 %s=%s：第 %d 页 %d 条（接口总数 %d）",
-                facet_type,
-                value,
+                "%s %s：第 %d 页 %d 条（接口总数 %d）",
+                section,
+                path,
                 page_number,
                 len(page_records),
                 total,
@@ -377,43 +447,60 @@ class OfficialSourcesCrawler:
                 break
             start += count
         summary = {
-            "id": f"explore:{facet_type}:{value}",
-            "name": f"选电影：{facet_type}={value}",
-            "kind": "电影",
-            "url": "https://movie.douban.com/explore",
+            "id": source_id,
+            "name": source_name,
+            "kind": "电影" if support_type == "movie" else "剧集",
+            "url": page_url,
             "extracted_records": len(records),
             "reported_total": total,
             "max_items": max_items,
+            "navigation": self._navigation(
+                section, tab, filter_name, value, group=group
+            ),
         }
         return records, summary
 
     def _crawl_recent_hot(
         self,
         *,
+        support_type: str,
+        page_url: str,
+        section: str,
         page_size: int,
         max_items: int,
         max_pages: int | None,
     ) -> tuple[list[MovieRecord], list[dict]]:
-        headers = {**self.json_headers, "Referer": "https://movie.douban.com/explore"}
+        headers = {**self.json_headers, "Referer": page_url}
+        endpoint = (
+            f"https://m.douban.com/rexxar/api/v2/subject/recent_hot/{support_type}"
+        )
         seed_url = self._url(
-            "https://m.douban.com/rexxar/api/v2/subject/recent_hot/movie",
+            endpoint,
             {"start": 0, "limit": min(page_size, max_items)},
         )
-        seed = self.crawler.get_json("official/explore_recent_hot_seed.json", seed_url, headers=headers)
+        seed = self.crawler.get_json(
+            f"official/explore_recent_{support_type}_seed.json",
+            seed_url,
+            headers=headers,
+        )
         if not isinstance(seed, dict):
-            raise ParseError("选电影热门子榜接口结构异常")
+            raise ParseError(f"{section}热门子榜接口结构异常")
 
         records: list[MovieRecord] = []
         summaries: list[dict] = []
         for main_tag in seed.get("tags") or []:
             category = str(main_tag.get("category", ""))
-            title = str(main_tag.get("title", category))
+            tab = str(main_tag.get("title", category))
             for subtype in main_tag.get("types") or []:
-                subtype_name = str(subtype.get("type", ""))
-                if not category or not subtype_name:
+                subtype_value = str(subtype.get("type", ""))
+                subtype_title = str(subtype.get("title", subtype_value))
+                if not category or not subtype_value:
                     continue
-                source_id = f"explore:recent:{category}:{subtype_name}"
-                source_name = f"选电影：{title}/{subtype_name}"
+                source_hash = self._stable_id(
+                    support_type, "recent", category, subtype_value
+                )
+                source_id = f"explore:{support_type}:recent:{source_hash}"
+                source_name = f"{section}：{tab}/{subtype_title}"
                 combo_records: list[MovieRecord] = []
                 start = 0
                 page_number = 0
@@ -424,28 +511,30 @@ class OfficialSourcesCrawler:
                     page_number += 1
                     limit = min(page_size, max_items - start)
                     url = self._url(
-                        "https://m.douban.com/rexxar/api/v2/subject/recent_hot/movie",
+                        endpoint,
                         {
                             "start": start,
                             "limit": limit,
                             "category": category,
-                            "type": subtype_name,
+                            "type": subtype_value,
                         },
                     )
-                    safe_id = self._stable_id(category, subtype_name)
                     payload = self.crawler.get_json(
-                        f"official/explore_recent_{safe_id}_start_{start}.json",
+                        f"official/explore_recent_{source_hash}_start_{start}.json",
                         url,
                         headers=headers,
                     )
                     if not isinstance(payload, dict):
-                        raise ParseError(f"选电影热门子榜结构异常：{source_name}")
+                        raise ParseError(f"{section}热门子榜结构异常：{source_name}")
                     total = int(payload.get("total") or 0)
                     items = payload.get("items") or []
+                    if not isinstance(items, list):
+                        raise ParseError(f"{section}热门子榜条目结构异常：{source_name}")
                     page_records = parse_explore_items(
                         items,
                         source_id=source_id,
                         source_name=source_name,
+                        support_type=support_type,
                     )
                     combo_records.extend(page_records)
                     if not items or len(items) < limit:
@@ -456,80 +545,236 @@ class OfficialSourcesCrawler:
                     {
                         "id": source_id,
                         "name": source_name,
-                        "kind": "电影",
-                        "url": "https://movie.douban.com/explore",
+                        "kind": "电影" if support_type == "movie" else "剧集",
+                        "url": page_url,
                         "extracted_records": len(combo_records),
                         "reported_total": total,
                         "max_items": max_items,
+                        "navigation": self._navigation(
+                            section, tab, "子榜", subtype_title
+                        ),
                     }
                 )
         return records, summaries
 
     def crawl_explore(
-        self, config: dict, *, max_pages: int | None = None
+        self,
+        config: dict,
+        *,
+        support_type: str = "movie",
+        max_pages: int | None = None,
     ) -> tuple[list[MovieRecord], list[dict]]:
+        if support_type not in {"movie", "tv"}:
+            raise ValueError(f"不支持的推荐类型：{support_type}")
+        section = "选电影" if support_type == "movie" else "选剧集"
+        page_url = (
+            "https://movie.douban.com/explore"
+            if support_type == "movie"
+            else "https://movie.douban.com/tv/"
+        )
         page_size = int(config.get("page_size", 500))
         max_items = int(config.get("max_items_per_filter", 500))
         seed = self._explore_payload(
-            cache_key="official/explore_seed.json",
+            support_type=support_type,
+            cache_key=f"official/explore_{support_type}_seed.json",
             selected_categories={},
             tags=[],
             start=0,
             count=20,
         )
-        facets: list[tuple[str, str, dict[str, str]]] = []
+        requests_to_crawl: list[dict] = [
+            {
+                "tab": "全部",
+                "filter_name": "全部",
+                "value": "全部",
+                "group": None,
+                "selected_categories": {},
+                "tags": [],
+                "sort": None,
+            }
+        ]
+
         for category in seed.get("recommend_categories") or []:
             facet_type = str(category.get("type", ""))
-            for item in category.get("data") or []:
-                value = str(item.get("text", ""))
-                if not facet_type or not value or item.get("default") or value == "全部":
-                    continue
-                facets.append((facet_type, value, {facet_type: value}))
+            category_items = category.get("data") or []
+            group_key = str(category.get("tag_groups", ""))
+            if not facet_type:
+                continue
+            if group_key:
+                group_names = [str(item.get("text", "")) for item in category_items]
+                for group_index, item in enumerate(category_items):
+                    group_name = str(item.get("text", ""))
+                    for tag_index, raw_tag in enumerate(item.get("tags") or []):
+                        value = str(raw_tag)
+                        if not value:
+                            continue
+                        if group_index == 0 and tag_index == 0:
+                            selected_categories: dict[str, str] = {}
+                            tags: list[str] = []
+                        elif group_index == 0:
+                            selected_group = group_names[tag_index]
+                            selected_categories = {
+                                facet_type: "",
+                                group_key: selected_group,
+                            }
+                            tags = [selected_group]
+                        else:
+                            selected_categories = {
+                                facet_type: value,
+                                group_key: group_name,
+                            }
+                            tags = [value]
+                        requests_to_crawl.append(
+                            {
+                                "tab": "全部",
+                                "filter_name": facet_type,
+                                "value": value,
+                                "group": "全部" if group_index == 0 else group_name,
+                                "selected_categories": selected_categories,
+                                "tags": tags,
+                                "sort": None,
+                            }
+                        )
+            else:
+                for item in category_items:
+                    value = str(item.get("text", ""))
+                    if not value:
+                        continue
+                    is_default = bool(item.get("default")) or value == "全部"
+                    requests_to_crawl.append(
+                        {
+                            "tab": "全部",
+                            "filter_name": facet_type,
+                            "value": value,
+                            "group": None,
+                            "selected_categories": {}
+                            if is_default
+                            else {facet_type: value},
+                            "tags": [] if is_default else [value],
+                            "sort": None,
+                        }
+                    )
 
         filter_url = self._url(
-            "https://m.douban.com/rexxar/api/v2/movie/recommend/filter_tags",
-            {"type": "movie", "selected_categories": "{}"},
+            f"https://m.douban.com/rexxar/api/v2/{support_type}/recommend/filter_tags",
+            {"type": support_type, "selected_categories": "{}"},
         )
         filter_payload = self.crawler.get_json(
-            "official/explore_filter_tags.json",
+            f"official/explore_{support_type}_filter_tags.json",
             filter_url,
-            headers={**self.json_headers, "Referer": "https://movie.douban.com/explore"},
+            headers={**self.json_headers, "Referer": page_url},
         )
         if isinstance(filter_payload, dict):
-            for group in filter_payload.get("tags") or []:
-                facet_type = str(group.get("type", ""))
-                if facet_type == "标签":
+            for filter_group in filter_payload.get("tags") or []:
+                facet_type = str(filter_group.get("type", ""))
+                if facet_type == "标签" or not facet_type:
                     continue
-                for value in group.get("tags") or []:
-                    value = str(value)
-                    if value and value != "全部":
-                        facets.append((facet_type, value, {}))
+                for raw_value in filter_group.get("tags") or []:
+                    value = str(raw_value)
+                    if not value:
+                        continue
+                    requests_to_crawl.append(
+                        {
+                            "tab": "全部",
+                            "filter_name": facet_type,
+                            "value": value,
+                            "group": None,
+                            "selected_categories": {},
+                            "tags": [] if value == "全部" else [value],
+                            "sort": None,
+                        }
+                    )
+
+        for sort_item in seed.get("sorts") or []:
+            sort_name = str(sort_item.get("name", ""))
+            sort_text = str(sort_item.get("text", sort_name))
+            if sort_name and sort_text:
+                requests_to_crawl.append(
+                    {
+                        "tab": "全部",
+                        "filter_name": "排序",
+                        "value": sort_text,
+                        "group": None,
+                        "selected_categories": {},
+                        "tags": [],
+                        "sort": sort_name,
+                    }
+                )
 
         if config.get("include_recommended_tags", True):
-            recommended = list(seed.get("recommend_tags") or []) + list(seed.get("bottom_recommend_tags") or [])
+            recommended = list(seed.get("recommend_tags") or []) + list(
+                seed.get("bottom_recommend_tags") or []
+            )
             for value in dict.fromkeys(str(tag) for tag in recommended if str(tag)):
-                facets.append(("推荐标签", value, {}))
+                requests_to_crawl.append(
+                    {
+                        "tab": "全部",
+                        "filter_name": "标签",
+                        "value": value,
+                        "group": "推荐标签",
+                        "selected_categories": {},
+                        "tags": [value],
+                        "sort": None,
+                    }
+                )
 
-        deduplicated: dict[tuple[str, str], tuple[str, str, dict[str, str]]] = {
-            (facet_type, value): (facet_type, value, selected)
-            for facet_type, value, selected in facets
-        }
+        deduplicated: dict[tuple[str, str, str, str], dict] = {}
+        for request in requests_to_crawl:
+            key = (
+                request["tab"],
+                request["filter_name"],
+                request.get("group") or "",
+                request["value"],
+            )
+            deduplicated[key] = request
+
+        query_groups: dict[tuple[str, str, str], list[dict]] = {}
+        for request in deduplicated.values():
+            query_key = (
+                json.dumps(
+                    request["selected_categories"],
+                    ensure_ascii=False,
+                    sort_keys=True,
+                ),
+                ",".join(request["tags"]),
+                request.get("sort") or "",
+            )
+            query_groups.setdefault(query_key, []).append(request)
+
+        def crawl_query_group(
+            group_requests: list[dict],
+        ) -> tuple[list[MovieRecord], list[dict]]:
+            group_records: list[MovieRecord] = []
+            group_summaries: list[dict] = []
+            for request in group_requests:
+                records, summary = self._crawl_explore_filter(
+                    support_type=support_type,
+                    page_url=page_url,
+                    section=section,
+                    page_size=page_size,
+                    max_items=max_items,
+                    max_pages=max_pages,
+                    **request,
+                )
+                group_records.extend(records)
+                group_summaries.append(summary)
+            return group_records, group_summaries
+
         all_records: list[MovieRecord] = []
         summaries: list[dict] = []
-        for facet_type, value, selected in deduplicated.values():
-            records, summary = self._crawl_explore_filter(
-                facet_type=facet_type,
-                value=value,
-                selected_categories=selected,
-                page_size=page_size,
-                max_items=max_items,
-                max_pages=max_pages,
-            )
-            all_records.extend(records)
-            summaries.append(summary)
+        workers = max(1, min(int(config.get("workers", 1)), 4))
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            for records, source_summaries in executor.map(
+                crawl_query_group, query_groups.values()
+            ):
+                all_records.extend(records)
+                summaries.extend(source_summaries)
 
         if config.get("include_recent_hot", True):
             recent_records, recent_summaries = self._crawl_recent_hot(
+                support_type=support_type,
+                page_url=page_url,
+                section=section,
                 page_size=page_size,
                 max_items=max_items,
                 max_pages=max_pages,
@@ -543,6 +788,24 @@ class OfficialSourcesCrawler:
     ) -> tuple[list[MovieRecord], list[dict]]:
         records: list[MovieRecord] = []
         summaries: list[dict] = []
+        explore_config = config.get("explore", {})
+        if explore_config.get("enabled", True):
+            batch, batch_summaries = self.crawl_explore(
+                explore_config,
+                support_type="movie",
+                max_pages=max_pages,
+            )
+            records.extend(batch)
+            summaries.extend(batch_summaries)
+        tv_config = config.get("tv", {})
+        if tv_config.get("enabled", True):
+            batch, batch_summaries = self.crawl_explore(
+                tv_config,
+                support_type="tv",
+                max_pages=max_pages,
+            )
+            records.extend(batch)
+            summaries.extend(batch_summaries)
         category_config = config.get("category_rankings", {})
         if category_config.get("enabled", True):
             batch, batch_summaries = self.crawl_category_rankings(
@@ -553,11 +816,6 @@ class OfficialSourcesCrawler:
         top250_config = config.get("top250", {})
         if top250_config.get("enabled", True):
             batch, batch_summaries = self.crawl_top250(top250_config, max_pages=max_pages)
-            records.extend(batch)
-            summaries.extend(batch_summaries)
-        explore_config = config.get("explore", {})
-        if explore_config.get("enabled", True):
-            batch, batch_summaries = self.crawl_explore(explore_config, max_pages=max_pages)
             records.extend(batch)
             summaries.extend(batch_summaries)
         return records, summaries

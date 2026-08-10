@@ -178,7 +178,16 @@
       "page_size": 500,
       "max_items_per_filter": 500,
       "include_recent_hot": true,
-      "include_recommended_tags": true
+      "include_recommended_tags": true,
+      "workers": 3
+    },
+    "tv": {
+      "enabled": true,
+      "page_size": 500,
+      "max_items_per_filter": 500,
+      "include_recent_hot": true,
+      "include_recommended_tags": true,
+      "workers": 3
     }
   },
   "ranking": {

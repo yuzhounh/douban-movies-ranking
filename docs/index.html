@@ -6,7 +6,7 @@
     <meta name="description" content="按评分质量与评价人数对数热度综合排序的豆瓣影视条目。">
     <meta name="color-scheme" content="light dark">
     <title>豆瓣影视综合排行榜</title>
-    <link rel="stylesheet" href="styles.css?v=20260810-2">
+    <link rel="stylesheet" href="styles.css?v=20260810-3">
   </head>
   <body>
     <header class="hero">
@@ -21,6 +21,16 @@
     </header>
 
     <main class="page">
+      <section class="catalog" aria-label="排行榜分类导航">
+        <nav class="section-tabs" id="section-tabs" aria-label="主要板块"></nav>
+        <nav class="category-tabs" id="category-tabs" aria-label="板块标签"></nav>
+        <div class="filter-panel">
+          <nav class="filter-tabs" id="filter-tabs" aria-label="筛选类别"></nav>
+          <div class="value-groups" id="value-groups" aria-label="筛选项目"></div>
+        </div>
+        <p class="selection" id="selection">正在载入分类…</p>
+      </section>
+
       <section class="toolbar" aria-label="排行榜筛选">
         <div>
           <p class="status" id="status" role="status">正在载入数据…</p>
@@ -67,10 +77,10 @@
     </main>
 
     <footer>
-      <p>数据来自公开豆列，仅供学习与索引。评分及评价人数可能随时间变化。</p>
+      <p>数据来自豆瓣公开榜单、筛选页面与豆列，仅供学习与索引。评分及评价人数可能随时间变化。</p>
       <a href="https://github.com/yuzhounh/douban-movies-ranking">查看源代码</a>
     </footer>
 
-    <script src="app.js?v=20260810-2" defer></script>
+    <script src="app.js?v=20260810-3" defer></script>
   </body>
 </html>

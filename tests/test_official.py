@@ -57,6 +57,28 @@ def test_parse_explore_items_uses_hidden_rating_count() -> None:
     assert records[0].genres == {"剧情", "喜剧"}
 
 
+def test_parse_explore_items_accepts_tv_subjects() -> None:
+    records = parse_explore_items(
+        [
+            {
+                "id": "26849758",
+                "type": "tv",
+                "title": "长安十二时辰",
+                "rating": {"value": 8.1, "count": 518_751},
+                "card_subtitle": "2019 / 中国大陆 / 剧情 悬疑 古装",
+            },
+            {"id": "1", "type": "movie", "title": "不是剧集"},
+        ],
+        source_id="explore:tv:test",
+        source_name="选剧集：类型/电视剧/剧情",
+        support_type="tv",
+        selected_genre="剧情",
+    )
+    assert len(records) == 1
+    assert records[0].kinds == {"剧集"}
+    assert records[0].genres == {"剧情", "悬疑", "古装"}
+
+
 def test_parse_top250_page() -> None:
     html = """
     <ol class="grid_view"><li><div class="item">

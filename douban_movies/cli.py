@@ -34,7 +34,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--timeout", type=float, default=30.0)
     parser.add_argument("--max-pages", type=int, help="每个豆列最多抓取页数（调试用）")
     parser.add_argument("--refresh", action="store_true", help="忽略 HTML 缓存重新请求")
-    parser.add_argument("--skip-official", action="store_true", help="只抓豆列，跳过分类榜、Top 250 和选电影")
+    parser.add_argument(
+        "--skip-official",
+        action="store_true",
+        help="只抓豆列，跳过分类榜、Top 250、选电影和选剧集",
+    )
     parser.add_argument(
         "--delta", type=float, help="综合评分的质量基线 delta，默认 2.5"
     )
@@ -88,6 +92,12 @@ def main(argv: list[str] | None = None) -> int:
                     "kind": source.kind,
                     "url": source.url,
                     "extracted_records": len(source_records),
+                    "navigation": {
+                        "section": "分类排行榜",
+                        "tab": "精选豆列",
+                        "filter": "豆列",
+                        "value": source.name,
+                    },
                 }
             )
 
