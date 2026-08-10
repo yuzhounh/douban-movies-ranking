@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import logging
 import random
 import time
@@ -69,8 +70,13 @@ class DoubanCrawler:
         start = query.get("start", ["0"])[0]
         return self.cache_dir / f"doulist_{source_id}_start_{start}.html"
 
-    def _get_html(self, source: DoulistSource, url: str) -> str:
-        cache_path = self._cache_path(source.id, url)
+    def _request_text(
+        self,
+        *,
+        cache_path: Path,
+        url: str,
+        headers: dict[str, str] | None = None,
+    ) -> str:
         if cache_path.exists() and not self.refresh:
             LOGGER.info("读取缓存：%s", cache_path.name)
             return cache_path.read_text(encoding="utf-8")
@@ -79,7 +85,7 @@ class DoubanCrawler:
         if wait_seconds:
             time.sleep(wait_seconds)
         LOGGER.info("请求：%s", url)
-        response = self.session.get(url, timeout=self.timeout)
+        response = self.session.get(url, headers=headers, timeout=self.timeout)
         response.raise_for_status()
         if "sec.douban.com" in response.url:
             raise ParseError(f"请求被重定向到豆瓣验证页：{response.url}")
@@ -91,8 +97,42 @@ class DoubanCrawler:
             or "豆瓣防刷机制" in html
         ):
             raise ParseError("豆瓣返回了验证或异常请求页面；该页面未写入缓存")
+        cache_path.parent.mkdir(parents=True, exist_ok=True)
         cache_path.write_text(html, encoding="utf-8")
         return html
+
+    def _get_html(self, source: DoulistSource, url: str) -> str:
+        return self._request_text(
+            cache_path=self._cache_path(source.id, url),
+            url=url,
+        )
+
+    def get_text(
+        self,
+        cache_key: str,
+        url: str,
+        *,
+        headers: dict[str, str] | None = None,
+    ) -> str:
+        """获取并缓存非豆列页面或接口响应。"""
+        return self._request_text(
+            cache_path=self.cache_dir / cache_key,
+            url=url,
+            headers=headers,
+        )
+
+    def get_json(
+        self,
+        cache_key: str,
+        url: str,
+        *,
+        headers: dict[str, str] | None = None,
+    ) -> object:
+        text = self.get_text(cache_key, url, headers=headers)
+        try:
+            return json.loads(text)
+        except json.JSONDecodeError as exc:
+            raise ParseError(f"豆瓣接口没有返回有效 JSON：{url}") from exc
 
     def crawl_source(
         self, source: DoulistSource, *, max_pages: int | None = None

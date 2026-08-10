@@ -14,6 +14,7 @@ class MovieRecord:
     kinds: set[str] = field(default_factory=set)
     source_ids: set[str] = field(default_factory=set)
     source_names: set[str] = field(default_factory=set)
+    genres: set[str] = field(default_factory=set)
     comprehensive_score: float = 0.0
     rank: int = 0
 
@@ -29,11 +30,13 @@ class MovieRecord:
         self.kinds.update(other.kinds)
         self.source_ids.update(other.source_ids)
         self.source_names.update(other.source_names)
+        self.genres.update(other.genres)
 
     def to_dict(self, crawled_at: str) -> dict[str, Any]:
         row = asdict(self)
         row["id"] = row.pop("subject_id")
         row["kind"] = " / ".join(sorted(row.pop("kinds")))
+        row["genres"] = " / ".join(sorted(row["genres"]))
         row["source_doulist_ids"] = " / ".join(sorted(row.pop("source_ids")))
         row["source_doulists"] = " / ".join(sorted(row.pop("source_names")))
         row["crawled_at"] = crawled_at

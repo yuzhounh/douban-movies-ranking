@@ -10,6 +10,7 @@ from pathlib import Path
 from requests.exceptions import RequestException
 
 from .crawler import DoubanCrawler, DoulistSource, merge_records
+from .official import OfficialSourcesCrawler
 from .parser import ParseError
 from .ranking import rank_records
 from .output import write_outputs, write_summary
@@ -19,7 +20,7 @@ LOGGER = logging.getLogger(__name__)
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="从影视豆列采集豆瓣条目 ID、评分和评价人数，并生成综合排行。"
+        description="从豆瓣影视榜单采集 ID、评分、评价人数和分类，并生成综合排行。"
     )
     parser.add_argument("--config", type=Path, default=Path("config/doulists.json"))
     parser.add_argument("--output", type=Path, default=Path("output"))
@@ -33,6 +34,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--timeout", type=float, default=30.0)
     parser.add_argument("--max-pages", type=int, help="每个豆列最多抓取页数（调试用）")
     parser.add_argument("--refresh", action="store_true", help="忽略 HTML 缓存重新请求")
+    parser.add_argument("--skip-official", action="store_true", help="只抓豆列，跳过分类榜、Top 250 和选电影")
     parser.add_argument(
         "--delta", type=float, help="综合评分的质量基线 delta，默认 2.5"
     )
@@ -40,7 +42,7 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def load_config(path: Path) -> tuple[list[DoulistSource], dict]:
+def load_config(path: Path) -> tuple[list[DoulistSource], dict, dict]:
     with path.open(encoding="utf-8") as handle:
         config = json.load(handle)
     sources = [
@@ -55,7 +57,7 @@ def load_config(path: Path) -> tuple[list[DoulistSource], dict]:
     ]
     if not sources:
         raise ValueError("配置中没有启用的豆列")
-    return sources, config.get("ranking", {})
+    return sources, config.get("ranking", {}), config.get("official_sources", {})
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -66,7 +68,7 @@ def main(argv: list[str] | None = None) -> int:
         datefmt="%H:%M:%S",
     )
     try:
-        sources, ranking_config = load_config(args.config)
+        sources, ranking_config, official_config = load_config(args.config)
         crawler = DoubanCrawler(
             cache_dir=args.cache_dir or args.output / "cache",
             delay=args.delay,
@@ -89,6 +91,14 @@ def main(argv: list[str] | None = None) -> int:
                 }
             )
 
+        if not args.skip_official and official_config.get("enabled", True):
+            official_records, official_results = OfficialSourcesCrawler(crawler).crawl_all(
+                official_config,
+                max_pages=args.max_pages,
+            )
+            all_records.extend(official_records)
+            source_results.extend(official_results)
+
         unique_records = merge_records(all_records)
         delta = (
             args.delta
@@ -103,7 +113,7 @@ def main(argv: list[str] | None = None) -> int:
         summary_path = write_summary(
             {
                 "generated_at": crawled_at,
-                "source_count": len(sources),
+                "source_count": len(source_results),
                 "raw_record_count": len(all_records),
                 "unique_record_count": len(ranked),
                 "ranking": {

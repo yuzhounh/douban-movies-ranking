@@ -4,10 +4,10 @@ from douban_movies.models import MovieRecord
 
 def test_merge_sources_and_keep_larger_vote_snapshot() -> None:
     first = MovieRecord(
-        "1", "旧标题", 8.0, 100, "u1", {"电影"}, {"a"}, {"A"}
+        "1", "旧标题", 8.0, 100, "u1", {"电影"}, {"a"}, {"A"}, {"剧情"}
     )
     second = MovieRecord(
-        "1", "新标题", 8.1, 120, "u2", {"电视剧"}, {"b"}, {"B"}
+        "1", "新标题", 8.1, 120, "u2", {"电视剧"}, {"b"}, {"B"}, {"喜剧"}
     )
     merged = merge_records([first, second])
     assert len(merged) == 1
@@ -15,3 +15,4 @@ def test_merge_sources_and_keep_larger_vote_snapshot() -> None:
     assert merged[0].rating_count == 120
     assert merged[0].source_ids == {"a", "b"}
     assert merged[0].kinds == {"电影", "电视剧"}
+    assert merged[0].genres == {"剧情", "喜剧"}

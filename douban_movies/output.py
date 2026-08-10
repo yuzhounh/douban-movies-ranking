@@ -14,6 +14,7 @@ FIELDNAMES = [
     "rating_count",
     "comprehensive_score",
     "kind",
+    "genres",
     "url",
     "source_doulist_ids",
     "source_doulists",

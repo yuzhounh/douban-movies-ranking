@@ -56,6 +56,16 @@ def parse_doulist_page(
             continue
 
         subject_id = match.group(1)
+        genres: set[str] = set()
+        abstract = item.select_one(".abstract")
+        if abstract is not None:
+            for line in abstract.get_text("\n").splitlines():
+                label, separator, values = line.strip().partition(":")
+                if separator and label.strip() == "类型":
+                    genres.update(
+                        genre.strip() for genre in values.split("/") if genre.strip()
+                    )
+                    break
         records.append(
             MovieRecord(
                 subject_id=subject_id,
@@ -66,6 +76,7 @@ def parse_doulist_page(
                 kinds={kind},
                 source_ids={source_id},
                 source_names={source_name},
+                genres=genres,
             )
         )
 

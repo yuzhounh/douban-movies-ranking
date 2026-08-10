@@ -1,8 +1,8 @@
 {
-  "generated_at": "2026-08-09T16:52:13+08:00",
-  "source_count": 21,
-  "raw_record_count": 9957,
-  "unique_record_count": 7877,
+  "generated_at": "2026-08-10T18:08:30+08:00",
+  "source_count": 140,
+  "raw_record_count": 118839,
+  "unique_record_count": 42010,
   "ranking": {
     "method": "quality_times_log_popularity",
     "formula": "(rating - delta) * ln(rating_count)",
@@ -155,6 +155,1019 @@
       "kind": "悬疑剧",
       "url": "https://www.douban.com/doulist/137843346/",
       "extracted_records": 453
+    },
+    {
+      "id": "category:1",
+      "name": "分类排行榜：纪录片",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E7%BA%AA%E5%BD%95%E7%89%87&type=1&interval_id=100%3A90&action=",
+      "extracted_records": 2831
+    },
+    {
+      "id": "category:2",
+      "name": "分类排行榜：传记",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E4%BC%A0%E8%AE%B0&type=2&interval_id=100%3A90&action=",
+      "extracted_records": 1457
+    },
+    {
+      "id": "category:3",
+      "name": "分类排行榜：犯罪",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E7%8A%AF%E7%BD%AA&type=3&interval_id=100%3A90&action=",
+      "extracted_records": 4509
+    },
+    {
+      "id": "category:4",
+      "name": "分类排行榜：历史",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E5%8E%86%E5%8F%B2&type=4&interval_id=100%3A90&action=",
+      "extracted_records": 1611
+    },
+    {
+      "id": "category:5",
+      "name": "分类排行榜：动作",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E5%8A%A8%E4%BD%9C&type=5&interval_id=100%3A90&action=",
+      "extracted_records": 5001
+    },
+    {
+      "id": "category:6",
+      "name": "分类排行榜：情色",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E6%83%85%E8%89%B2&type=6&interval_id=100%3A90&action=",
+      "extracted_records": 1105
+    },
+    {
+      "id": "category:7",
+      "name": "分类排行榜：歌舞",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E6%AD%8C%E8%88%9E&type=7&interval_id=100%3A90&action=",
+      "extracted_records": 783
+    },
+    {
+      "id": "category:8",
+      "name": "分类排行榜：儿童",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E5%84%BF%E7%AB%A5&type=8&interval_id=100%3A90&action=",
+      "extracted_records": 383
+    },
+    {
+      "id": "category:10",
+      "name": "分类排行榜：悬疑",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E6%82%AC%E7%96%91&type=10&interval_id=100%3A90&action=",
+      "extracted_records": 3261
+    },
+    {
+      "id": "category:11",
+      "name": "分类排行榜：剧情",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E5%89%A7%E6%83%85&type=11&interval_id=100%3A90&action=",
+      "extracted_records": 11363
+    },
+    {
+      "id": "category:12",
+      "name": "分类排行榜：灾难",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E7%81%BE%E9%9A%BE&type=12&interval_id=100%3A90&action=",
+      "extracted_records": 237
+    },
+    {
+      "id": "category:13",
+      "name": "分类排行榜：爱情",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E7%88%B1%E6%83%85&type=13&interval_id=100%3A90&action=",
+      "extracted_records": 5545
+    },
+    {
+      "id": "category:14",
+      "name": "分类排行榜：音乐",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E9%9F%B3%E4%B9%90&type=14&interval_id=100%3A90&action=",
+      "extracted_records": 999
+    },
+    {
+      "id": "category:15",
+      "name": "分类排行榜：冒险",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E5%86%92%E9%99%A9&type=15&interval_id=100%3A90&action=",
+      "extracted_records": 3177
+    },
+    {
+      "id": "category:16",
+      "name": "分类排行榜：奇幻",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E5%A5%87%E5%B9%BB&type=16&interval_id=100%3A90&action=",
+      "extracted_records": 2915
+    },
+    {
+      "id": "category:17",
+      "name": "分类排行榜：科幻",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E7%A7%91%E5%B9%BB&type=17&interval_id=100%3A90&action=",
+      "extracted_records": 2555
+    },
+    {
+      "id": "category:18",
+      "name": "分类排行榜：运动",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E8%BF%90%E5%8A%A8&type=18&interval_id=100%3A90&action=",
+      "extracted_records": 657
+    },
+    {
+      "id": "category:19",
+      "name": "分类排行榜：惊悚",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E6%83%8A%E6%82%9A&type=19&interval_id=100%3A90&action=",
+      "extracted_records": 4631
+    },
+    {
+      "id": "category:20",
+      "name": "分类排行榜：恐怖",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E6%81%90%E6%80%96&type=20&interval_id=100%3A90&action=",
+      "extracted_records": 3861
+    },
+    {
+      "id": "category:22",
+      "name": "分类排行榜：战争",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E6%88%98%E4%BA%89&type=22&interval_id=100%3A90&action=",
+      "extracted_records": 1443
+    },
+    {
+      "id": "category:23",
+      "name": "分类排行榜：短片",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E7%9F%AD%E7%89%87&type=23&interval_id=100%3A90&action=",
+      "extracted_records": 4015
+    },
+    {
+      "id": "category:24",
+      "name": "分类排行榜：喜剧",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E5%96%9C%E5%89%A7&type=24&interval_id=100%3A90&action=",
+      "extracted_records": 7801
+    },
+    {
+      "id": "category:25",
+      "name": "分类排行榜：动画",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E5%8A%A8%E7%94%BB&type=25&interval_id=100%3A90&action=",
+      "extracted_records": 2727
+    },
+    {
+      "id": "category:27",
+      "name": "分类排行榜：西部",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E8%A5%BF%E9%83%A8&type=27&interval_id=100%3A90&action=",
+      "extracted_records": 353
+    },
+    {
+      "id": "category:28",
+      "name": "分类排行榜：家庭",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E5%AE%B6%E5%BA%AD&type=28&interval_id=100%3A90&action=",
+      "extracted_records": 1977
+    },
+    {
+      "id": "category:29",
+      "name": "分类排行榜：武侠",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E6%AD%A6%E4%BE%A0&type=29&interval_id=100%3A90&action=",
+      "extracted_records": 515
+    },
+    {
+      "id": "category:30",
+      "name": "分类排行榜：古装",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E5%8F%A4%E8%A3%85&type=30&interval_id=100%3A90&action=",
+      "extracted_records": 999
+    },
+    {
+      "id": "category:31",
+      "name": "分类排行榜：黑色电影",
+      "kind": "电影",
+      "url": "https://movie.douban.com/typerank?type_name=%E9%BB%91%E8%89%B2%E7%94%B5%E5%BD%B1&type=31&interval_id=100%3A90&action=",
+      "extracted_records": 185
+    },
+    {
+      "id": "top250",
+      "name": "豆瓣电影 Top 250",
+      "kind": "电影",
+      "url": "https://movie.douban.com/top250",
+      "extracted_records": 250
+    },
+    {
+      "id": "explore:类型:喜剧",
+      "name": "选电影：类型=喜剧",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:爱情",
+      "name": "选电影：类型=爱情",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:动作",
+      "name": "选电影：类型=动作",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:科幻",
+      "name": "选电影：类型=科幻",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:动画",
+      "name": "选电影：类型=动画",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:悬疑",
+      "name": "选电影：类型=悬疑",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:犯罪",
+      "name": "选电影：类型=犯罪",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:惊悚",
+      "name": "选电影：类型=惊悚",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:冒险",
+      "name": "选电影：类型=冒险",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:音乐",
+      "name": "选电影：类型=音乐",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 402,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:历史",
+      "name": "选电影：类型=历史",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 494,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:奇幻",
+      "name": "选电影：类型=奇幻",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:恐怖",
+      "name": "选电影：类型=恐怖",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:战争",
+      "name": "选电影：类型=战争",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 495,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:传记",
+      "name": "选电影：类型=传记",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 467,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:歌舞",
+      "name": "选电影：类型=歌舞",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 340,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:武侠",
+      "name": "选电影：类型=武侠",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 362,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:情色",
+      "name": "选电影：类型=情色",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 494,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:灾难",
+      "name": "选电影：类型=灾难",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 200,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:西部",
+      "name": "选电影：类型=西部",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 234,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:纪录片",
+      "name": "选电影：类型=纪录片",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 433,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:类型:短片",
+      "name": "选电影：类型=短片",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 401,
+      "reported_total": 501,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:华语",
+      "name": "选电影：地区=华语",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:欧美",
+      "name": "选电影：地区=欧美",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:韩国",
+      "name": "选电影：地区=韩国",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:日本",
+      "name": "选电影：地区=日本",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:中国大陆",
+      "name": "选电影：地区=中国大陆",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:美国",
+      "name": "选电影：地区=美国",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:中国香港",
+      "name": "选电影：地区=中国香港",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:中国台湾",
+      "name": "选电影：地区=中国台湾",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 430,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:英国",
+      "name": "选电影：地区=英国",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:法国",
+      "name": "选电影：地区=法国",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:德国",
+      "name": "选电影：地区=德国",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:意大利",
+      "name": "选电影：地区=意大利",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:西班牙",
+      "name": "选电影：地区=西班牙",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 407,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:印度",
+      "name": "选电影：地区=印度",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 262,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:泰国",
+      "name": "选电影：地区=泰国",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 263,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:俄罗斯",
+      "name": "选电影：地区=俄罗斯",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 265,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:加拿大",
+      "name": "选电影：地区=加拿大",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 460,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:澳大利亚",
+      "name": "选电影：地区=澳大利亚",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 324,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:爱尔兰",
+      "name": "选电影：地区=爱尔兰",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 262,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:瑞典",
+      "name": "选电影：地区=瑞典",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 332,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:巴西",
+      "name": "选电影：地区=巴西",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 318,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:地区:丹麦",
+      "name": "选电影：地区=丹麦",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 436,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:2020年代",
+      "name": "选电影：年代=2020年代",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 498,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:2026",
+      "name": "选电影：年代=2026",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 336,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:2025",
+      "name": "选电影：年代=2025",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 476,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:2024",
+      "name": "选电影：年代=2024",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 494,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:2023",
+      "name": "选电影：年代=2023",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 498,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:2022",
+      "name": "选电影：年代=2022",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 447,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:2021",
+      "name": "选电影：年代=2021",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 452,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:2020",
+      "name": "选电影：年代=2020",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 427,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:2019",
+      "name": "选电影：年代=2019",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 465,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:2010年代",
+      "name": "选电影：年代=2010年代",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:2000年代",
+      "name": "选电影：年代=2000年代",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:90年代",
+      "name": "选电影：年代=90年代",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:80年代",
+      "name": "选电影：年代=80年代",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:70年代",
+      "name": "选电影：年代=70年代",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:60年代",
+      "name": "选电影：年代=60年代",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:年代:更早",
+      "name": "选电影：年代=更早",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 499,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:推荐标签:商业",
+      "name": "选电影：推荐标签=商业",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 176,
+      "reported_total": 184,
+      "max_items": 500
+    },
+    {
+      "id": "explore:推荐标签:篮球黑白",
+      "name": "选电影：推荐标签=篮球黑白",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 0,
+      "reported_total": 0,
+      "max_items": 500
+    },
+    {
+      "id": "explore:推荐标签:推理",
+      "name": "选电影：推荐标签=推理",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:推荐标签:银河映像",
+      "name": "选电影：推荐标签=银河映像",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 85,
+      "reported_total": 88,
+      "max_items": 500
+    },
+    {
+      "id": "explore:推荐标签:歌剧",
+      "name": "选电影：推荐标签=歌剧",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 34,
+      "reported_total": 130,
+      "max_items": 500
+    },
+    {
+      "id": "explore:推荐标签:宇宙",
+      "name": "选电影：推荐标签=宇宙",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 99,
+      "reported_total": 154,
+      "max_items": 500
+    },
+    {
+      "id": "explore:推荐标签:城市",
+      "name": "选电影：推荐标签=城市",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 71,
+      "reported_total": 75,
+      "max_items": 500
+    },
+    {
+      "id": "explore:推荐标签:pixar",
+      "name": "选电影：推荐标签=pixar",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 0,
+      "reported_total": 0,
+      "max_items": 500
+    },
+    {
+      "id": "explore:推荐标签:宫廷",
+      "name": "选电影：推荐标签=宫廷",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 88,
+      "reported_total": 90,
+      "max_items": 500
+    },
+    {
+      "id": "explore:推荐标签:漫画改编",
+      "name": "选电影：推荐标签=漫画改编",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:热门:全部",
+      "name": "选电影：热门电影/全部",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 338,
+      "reported_total": 338,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:热门:华语",
+      "name": "选电影：热门电影/华语",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 61,
+      "reported_total": 61,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:热门:欧美",
+      "name": "选电影：热门电影/欧美",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 193,
+      "reported_total": 193,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:热门:韩国",
+      "name": "选电影：热门电影/韩国",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 25,
+      "reported_total": 25,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:热门:日本",
+      "name": "选电影：热门电影/日本",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 31,
+      "reported_total": 31,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:最新:全部",
+      "name": "选电影：最新电影/全部",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:最新:华语",
+      "name": "选电影：最新电影/华语",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 84,
+      "reported_total": 84,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:最新:欧美",
+      "name": "选电影：最新电影/欧美",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 270,
+      "reported_total": 270,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:最新:韩国",
+      "name": "选电影：最新电影/韩国",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 29,
+      "reported_total": 29,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:最新:日本",
+      "name": "选电影：最新电影/日本",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 67,
+      "reported_total": 67,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:豆瓣高分:全部",
+      "name": "选电影：豆瓣高分/全部",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:豆瓣高分:华语",
+      "name": "选电影：豆瓣高分/华语",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 118,
+      "reported_total": 118,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:豆瓣高分:欧美",
+      "name": "选电影：豆瓣高分/欧美",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 298,
+      "reported_total": 298,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:豆瓣高分:韩国",
+      "name": "选电影：豆瓣高分/韩国",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 16,
+      "reported_total": 16,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:豆瓣高分:日本",
+      "name": "选电影：豆瓣高分/日本",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 49,
+      "reported_total": 49,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:冷门佳片:全部",
+      "name": "选电影：冷门佳片/全部",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 500,
+      "reported_total": 500,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:冷门佳片:华语",
+      "name": "选电影：冷门佳片/华语",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 62,
+      "reported_total": 62,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:冷门佳片:欧美",
+      "name": "选电影：冷门佳片/欧美",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 249,
+      "reported_total": 249,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:冷门佳片:韩国",
+      "name": "选电影：冷门佳片/韩国",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 8,
+      "reported_total": 8,
+      "max_items": 500
+    },
+    {
+      "id": "explore:recent:冷门佳片:日本",
+      "name": "选电影：冷门佳片/日本",
+      "kind": "电影",
+      "url": "https://movie.douban.com/explore",
+      "extracted_records": 123,
+      "reported_total": 123,
+      "max_items": 500
     }
   ]
 }

@@ -148,6 +148,39 @@
       "enabled": true
     }
   ],
+  "official_sources": {
+    "enabled": true,
+    "category_rankings": {
+      "enabled": true,
+      "url": "https://movie.douban.com/typerank?type_name=剧情&type=11&interval_id=100:90&action=",
+      "intervals": [
+        "100:90",
+        "90:80",
+        "80:70",
+        "70:60",
+        "60:50",
+        "50:40",
+        "40:30",
+        "30:20",
+        "20:10",
+        "10:0"
+      ],
+      "page_size": 1000
+    },
+    "top250": {
+      "enabled": true,
+      "url": "https://movie.douban.com/top250",
+      "page_size": 25,
+      "total": 250
+    },
+    "explore": {
+      "enabled": true,
+      "page_size": 500,
+      "max_items_per_filter": 500,
+      "include_recent_hot": true,
+      "include_recommended_tags": true
+    }
+  },
   "ranking": {
     "delta": 2.5
   }

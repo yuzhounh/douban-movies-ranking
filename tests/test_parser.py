@@ -17,7 +17,9 @@ def test_parse_doulist_page() -> None:
     assert [record.subject_id for record in records] == ["1292052", "1291546"]
     assert records[0].rating == 9.7
     assert records[0].rating_count == 3_312_447
+    assert records[0].genres == {"剧情", "犯罪"}
     assert records[1].rating_count == 2_445_001
+    assert records[1].genres == {"剧情", "爱情", "同性"}
     assert next_url == "https://www.douban.com/doulist/240962/?start=25&sort=seq"
 
 
