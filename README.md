@@ -4,6 +4,18 @@
 
 > 使用前请确认你的使用方式符合豆瓣网站条款与当地法律。程序默认低频串行请求，不绕过验证码；如果出现验证页，请停止运行、延长间隔后再试。
 
+## 在线排行榜
+
+GitHub Pages 页面展示排序后的 `id`、`title`、`rating`、`rating_count` 和 `url`，并支持搜索与分页：
+
+<https://yuzhounh.github.io/douban-movies-ranking/>
+
+抓取完成后，可用下面的命令从最终 JSON 重新生成网页数据：
+
+```powershell
+python scripts/build_pages_data.py
+```
+
 ## 默认数据源
 
 默认启用 21 个豆列（检索和核对日期：2026-08-09），完整清单见 `config/doulists.json`：
@@ -104,16 +116,4 @@ python -m douban_movies --delta 2.5
 ```powershell
 python -m pip install -r requirements-dev.txt
 python -m pytest -q
-```
-
-## 在线排行榜
-
-GitHub Pages 页面展示排序后的 `id`、`title`、`rating`、`rating_count` 和 `url`，并支持搜索与分页：
-
-<https://yuzhounh.github.io/douban-movies-ranking/>
-
-抓取完成后，可用下面的命令从最终 JSON 重新生成网页数据：
-
-```powershell
-python scripts/build_pages_data.py
 ```
