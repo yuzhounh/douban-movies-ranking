@@ -25,6 +25,10 @@ function makeCell(className, text) {
   return cell;
 }
 
+function openMovie(url) {
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
 function render() {
   const totalPages = Math.max(1, Math.ceil(state.filtered.length / state.pageSize));
   state.page = Math.min(state.page, totalPages);
@@ -35,12 +39,23 @@ function render() {
   if (visible.length === 0) {
     const row = document.createElement("tr");
     const cell = makeCell("message", "没有找到匹配的影视条目");
-    cell.colSpan = 6;
+    cell.colSpan = 5;
     row.append(cell);
     fragment.append(row);
   } else {
     visible.forEach((movie, index) => {
       const row = document.createElement("tr");
+      row.dataset.url = movie.url;
+      row.tabIndex = 0;
+      row.setAttribute("role", "link");
+      row.setAttribute("aria-label", `在豆瓣打开《${movie.title}》`);
+      row.addEventListener("click", () => openMovie(movie.url));
+      row.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openMovie(movie.url);
+        }
+      });
       row.append(
         makeCell("rank", integerFormat.format(start + index + 1)),
         makeCell("id", movie.id),
@@ -48,15 +63,6 @@ function render() {
         makeCell("number rating", Number(movie.rating).toFixed(1)),
         makeCell("number", integerFormat.format(movie.rating_count)),
       );
-      const linkCell = document.createElement("td");
-      const link = document.createElement("a");
-      link.className = "movie-link";
-      link.href = movie.url;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      link.textContent = "豆瓣 ↗";
-      linkCell.append(link);
-      row.append(linkCell);
       fragment.append(row);
     });
   }
@@ -114,5 +120,5 @@ fetch("data/movies.json")
   })
   .catch((error) => {
     elements.status.textContent = "数据载入失败";
-    elements.rows.innerHTML = `<tr><td colspan="6" class="message">无法载入排行榜数据：${error.message}</td></tr>`;
+    elements.rows.innerHTML = `<tr><td colspan="5" class="message">无法载入排行榜数据：${error.message}</td></tr>`;
   });

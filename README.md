@@ -6,7 +6,7 @@
 
 ## 在线排行榜
 
-GitHub Pages 页面展示排序后的 `id`、`title`、`rating`、`rating_count` 和 `url`，并支持搜索与分页：
+GitHub Pages 页面展示排序后的 `id`、`title`、`rating` 和 `rating_count`，点击任意影视条目所在行即可打开对应豆瓣页面，并支持搜索与分页：
 
 <https://yuzhounh.github.io/douban-movies-ranking/>
 
