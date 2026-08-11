@@ -7,7 +7,6 @@ const state = {
   filtered: [],
   selectedSection: "",
   selectedTab: "",
-  selectedFilter: "",
   selectedSource: -1,
   page: 1,
   pageSize: 50,
@@ -16,7 +15,6 @@ const state = {
 const elements = {
   sections: document.querySelector("#section-tabs"),
   categories: document.querySelector("#category-tabs"),
-  filters: document.querySelector("#filter-tabs"),
   values: document.querySelector("#value-groups"),
   selection: document.querySelector("#selection"),
   rows: document.querySelector("#movie-rows"),
@@ -65,10 +63,8 @@ function buildTree() {
   state.navigation.forEach((source, sourceIndex) => {
     if (!state.tree.has(source.section)) state.tree.set(source.section, new Map());
     const tabs = state.tree.get(source.section);
-    if (!tabs.has(source.tab)) tabs.set(source.tab, new Map());
-    const filters = tabs.get(source.tab);
-    if (!filters.has(source.filter)) filters.set(source.filter, []);
-    filters.get(source.filter).push(sourceIndex);
+    if (!tabs.has(source.tab)) tabs.set(source.tab, []);
+    tabs.get(source.tab).push(sourceIndex);
   });
 }
 
@@ -76,9 +72,7 @@ function selectFirstSource() {
   const tabs = state.tree.get(state.selectedSection);
   if (!tabs) return;
   if (!tabs.has(state.selectedTab)) state.selectedTab = tabs.keys().next().value;
-  const filters = tabs.get(state.selectedTab);
-  if (!filters.has(state.selectedFilter)) state.selectedFilter = filters.keys().next().value;
-  const sources = filters.get(state.selectedFilter);
+  const sources = tabs.get(state.selectedTab);
   if (!sources.includes(state.selectedSource)) state.selectedSource = sources[0];
 }
 
@@ -89,7 +83,6 @@ function renderNavigation() {
     sectionFragment.append(makeButton(section, section === state.selectedSection, () => {
       state.selectedSection = section;
       state.selectedTab = "";
-      state.selectedFilter = "";
       state.selectedSource = -1;
       updateSelection();
     }, "section-button"));
@@ -101,26 +94,14 @@ function renderNavigation() {
   tabs.forEach((_, tab) => {
     tabFragment.append(makeButton(tab, tab === state.selectedTab, () => {
       state.selectedTab = tab;
-      state.selectedFilter = "";
       state.selectedSource = -1;
       updateSelection();
     }, "category-button"));
   });
   elements.categories.replaceChildren(tabFragment);
 
-  const filters = tabs.get(state.selectedTab);
-  const filterFragment = document.createDocumentFragment();
-  filters.forEach((_, filter) => {
-    filterFragment.append(makeButton(filter, filter === state.selectedFilter, () => {
-      state.selectedFilter = filter;
-      state.selectedSource = -1;
-      updateSelection();
-    }, "filter-button"));
-  });
-  elements.filters.replaceChildren(filterFragment);
-
   const grouped = new Map();
-  filters.get(state.selectedFilter).forEach((sourceIndex) => {
+  tabs.get(state.selectedTab).forEach((sourceIndex) => {
     const source = state.navigation[sourceIndex];
     const group = source.group || "";
     if (!grouped.has(group)) grouped.set(group, []);
@@ -156,7 +137,7 @@ function updateSelection() {
   renderNavigation();
   const source = state.navigation[state.selectedSource];
   state.current = state.moviesBySource[state.selectedSource] || [];
-  const path = [source.section, source.tab, source.filter, source.group, source.value]
+  const path = [source.section, source.tab, source.group, source.value]
     .filter((part, index, values) => part && values.indexOf(part) === index);
   elements.selection.textContent = path.join(" / ");
   state.page = 1;
@@ -237,7 +218,7 @@ elements.next.addEventListener("click", () => {
   window.scrollTo({ top: document.querySelector(".toolbar").offsetTop, behavior: "smooth" });
 });
 
-fetch("data/movies.json?v=20260810-3")
+fetch("data/movies.json?v=20260811-1")
   .then((response) => {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return response.json();
