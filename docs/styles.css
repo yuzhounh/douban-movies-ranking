@@ -33,7 +33,7 @@ footer {
 }
 
 .page {
-  width: min(1440px, calc(100% - 32px));
+  width: min(1180px, calc(100% - 32px));
   margin-inline: auto;
 }
 
@@ -80,7 +80,7 @@ h1 {
 .workspace {
   display: grid;
   grid-template-columns: minmax(290px, 340px) minmax(0, 1fr);
-  align-items: stretch;
+  align-items: start;
   gap: 24px;
 }
 
@@ -91,7 +91,7 @@ h1 {
 
 .catalog {
   position: relative;
-  overflow: visible;
+  overflow: clip;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--surface-strong);
@@ -157,8 +157,8 @@ h1 {
   border-bottom: 3px solid transparent;
   border-radius: 0;
   padding-inline: 6px;
-  font-size: .86rem;
-  font-weight: 600;
+  font-size: .9rem;
+  font-weight: 700;
   white-space: nowrap;
 }
 
@@ -171,7 +171,8 @@ h1 {
   border-radius: 0;
   padding-inline: 14px;
   text-align: left;
-  font-weight: 500;
+  font-size: .86rem;
+  font-weight: 600;
 }
 .category-button::after {
   content: "›";
@@ -189,10 +190,11 @@ h1 {
   justify-content: space-between;
   gap: 7px;
   min-height: 34px;
-  padding: 5px 9px;
+  padding: 5px 9px 5px 18px;
   border-color: transparent;
   background: transparent;
   text-align: left;
+  font-size: .8rem;
   font-weight: 400;
 }
 .button-label { min-width: 0; }
@@ -211,13 +213,16 @@ h1 {
   border-bottom-color: var(--accent);
   color: var(--accent);
 }
-.category-button.is-active,
+.category-button.is-active {
+  background: color-mix(in srgb, var(--accent-soft) 45%, transparent);
+  color: var(--accent);
+  font-weight: 650;
+}
 .value-button.is-active {
   background: var(--accent-soft);
   color: var(--accent);
+  font-weight: 600;
 }
-.category-button.is-active { font-weight: 600; }
-.value-button.is-active { font-weight: 550; }
 .selection {
   margin: 13px 12px 16px;
   color: var(--muted);
