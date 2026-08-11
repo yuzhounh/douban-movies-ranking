@@ -15,7 +15,6 @@ const state = {
 const elements = {
   sections: document.querySelector("#section-tabs"),
   categories: document.querySelector("#category-tabs"),
-  values: document.querySelector("#value-groups"),
   selection: document.querySelector("#selection"),
   rows: document.querySelector("#movie-rows"),
   status: document.querySelector("#status"),
@@ -47,6 +46,7 @@ function makeButton(label, active, onClick, className = "nav-button", count = nu
   button.classList.toggle("is-active", active);
   button.setAttribute("aria-pressed", String(active));
   const text = document.createElement("span");
+  text.className = "button-label";
   text.textContent = label;
   button.append(text);
   if (count !== null) {
@@ -95,51 +95,60 @@ function renderNavigation() {
 
   const tabs = state.tree.get(state.selectedSection);
   const tabFragment = document.createDocumentFragment();
-  tabs.forEach((_, tab) => {
-    tabFragment.append(makeButton(tab, tab === state.selectedTab, () => {
+  tabs.forEach((sourceIndexes, tab) => {
+    const expanded = tab === state.selectedTab;
+    const item = document.createElement("section");
+    item.className = "category-item";
+    const tabButton = makeButton(tab, expanded, () => {
       state.selectedTab = tab;
       state.selectedSource = -1;
       updateSelection();
-    }, "category-button"));
+    }, "category-button");
+    tabButton.setAttribute("aria-label", tab);
+    tabButton.setAttribute("aria-expanded", String(expanded));
+    item.append(tabButton);
+
+    if (expanded) {
+      const grouped = new Map();
+      sourceIndexes.forEach((sourceIndex) => {
+        const source = state.navigation[sourceIndex];
+        const group = source.group || "";
+        if (!grouped.has(group)) grouped.set(group, []);
+        grouped.get(group).push(sourceIndex);
+      });
+      const values = document.createElement("div");
+      values.className = "accordion-values";
+      grouped.forEach((groupSourceIndexes, group) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "value-group";
+        if (group) {
+          const heading = document.createElement("p");
+          heading.className = "value-group__title";
+          heading.textContent = group;
+          wrapper.append(heading);
+        }
+        const buttons = document.createElement("div");
+        buttons.className = "value-buttons";
+        groupSourceIndexes.forEach((sourceIndex) => {
+          const source = state.navigation[sourceIndex];
+          const valueButton = makeButton(source.value, sourceIndex === state.selectedSource, () => {
+            state.selectedSource = sourceIndex;
+            updateSelection();
+          }, "value-button", state.moviesBySource[sourceIndex].length);
+          if (source.section === "分类排行榜" && source.tab === "精选豆列") {
+            valueButton.classList.add("is-truncated");
+            valueButton.title = source.value;
+          }
+          buttons.append(valueButton);
+        });
+        wrapper.append(buttons);
+        values.append(wrapper);
+      });
+      item.append(values);
+    }
+    tabFragment.append(item);
   });
   elements.categories.replaceChildren(tabFragment);
-
-  const grouped = new Map();
-  tabs.get(state.selectedTab).forEach((sourceIndex) => {
-    const source = state.navigation[sourceIndex];
-    const group = source.group || "";
-    if (!grouped.has(group)) grouped.set(group, []);
-    grouped.get(group).push(sourceIndex);
-  });
-  const valueFragment = document.createDocumentFragment();
-  grouped.forEach((sourceIndexes, group) => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "value-group";
-    if (group) {
-      const heading = document.createElement("p");
-      heading.className = "value-group__title";
-      heading.textContent = group;
-      wrapper.append(heading);
-    }
-    const buttons = document.createElement("div");
-    buttons.className = "value-buttons";
-    sourceIndexes.forEach((sourceIndex) => {
-      const source = state.navigation[sourceIndex];
-      if (source.tab === "年代" && source.value === "2020年代") {
-        const rowBreak = document.createElement("span");
-        rowBreak.className = "value-row-break";
-        rowBreak.setAttribute("aria-hidden", "true");
-        buttons.append(rowBreak);
-      }
-      buttons.append(makeButton(source.value, sourceIndex === state.selectedSource, () => {
-        state.selectedSource = sourceIndex;
-        updateSelection();
-      }, "value-button", state.moviesBySource[sourceIndex].length));
-    });
-    wrapper.append(buttons);
-    valueFragment.append(wrapper);
-  });
-  elements.values.replaceChildren(valueFragment);
 }
 
 function updateSelection() {
@@ -265,7 +274,7 @@ elements.lastPage.addEventListener("click", () => {
   scrollToResults();
 });
 
-fetch("data/movies.json?v=20260811-5")
+fetch("data/movies.json?v=20260811-6")
   .then((response) => {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return response.json();
