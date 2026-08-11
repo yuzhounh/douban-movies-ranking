@@ -7,6 +7,7 @@ const state = {
   filtered: [],
   selectedSection: "",
   selectedTab: "",
+  expandedTab: "",
   selectedSource: -1,
   page: 1,
   pageSize: 50,
@@ -86,7 +87,8 @@ function renderNavigation() {
   state.tree.forEach((_, section) => {
     sectionFragment.append(makeButton(section, section === state.selectedSection, () => {
       state.selectedSection = section;
-      state.selectedTab = "";
+      state.selectedTab = state.tree.get(section).keys().next().value;
+      state.expandedTab = state.selectedTab;
       state.selectedSource = -1;
       updateSelection();
     }, "section-button"));
@@ -96,10 +98,21 @@ function renderNavigation() {
   const tabs = state.tree.get(state.selectedSection);
   const tabFragment = document.createDocumentFragment();
   tabs.forEach((sourceIndexes, tab) => {
-    const expanded = tab === state.selectedTab;
+    const active = tab === state.selectedTab;
+    const expanded = tab === state.expandedTab;
     const item = document.createElement("section");
     item.className = "category-item";
-    const tabButton = makeButton(tab, expanded, () => {
+    const tabButton = makeButton(tab, active, () => {
+      if (expanded) {
+        state.expandedTab = "";
+        renderNavigation();
+        return;
+      }
+      state.expandedTab = tab;
+      if (active) {
+        renderNavigation();
+        return;
+      }
       state.selectedTab = tab;
       state.selectedSource = -1;
       updateSelection();
@@ -274,7 +287,7 @@ elements.lastPage.addEventListener("click", () => {
   scrollToResults();
 });
 
-fetch("data/movies.json?v=20260811-6")
+fetch("data/movies.json?v=20260811-7")
   .then((response) => {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return response.json();
@@ -290,6 +303,8 @@ fetch("data/movies.json?v=20260811-6")
     });
     buildTree();
     state.selectedSection = state.tree.keys().next().value;
+    state.selectedTab = state.tree.get(state.selectedSection).keys().next().value;
+    state.expandedTab = state.selectedTab;
     if (payload.generated_at) {
       const updated = new Date(payload.generated_at);
       elements.updated.textContent = `数据更新时间：${updated.toLocaleString("zh-CN", { hour12: false })}`;

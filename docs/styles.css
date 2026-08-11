@@ -80,7 +80,7 @@ h1 {
 .workspace {
   display: grid;
   grid-template-columns: minmax(290px, 340px) minmax(0, 1fr);
-  align-items: start;
+  align-items: stretch;
   gap: 24px;
 }
 
@@ -90,11 +90,8 @@ h1 {
 }
 
 .catalog {
-  position: sticky;
-  top: 18px;
-  max-height: calc(100vh - 36px);
-  overflow: hidden;
-  overflow-y: auto;
+  position: relative;
+  overflow: visible;
   border: 1px solid var(--line);
   border-radius: 12px;
   background: var(--surface-strong);
@@ -109,6 +106,9 @@ h1 {
 }
 
 .section-tabs {
+  position: sticky;
+  z-index: 3;
+  top: 18px;
   gap: 0;
   padding: 0 8px;
   border-bottom: 1px solid var(--line);
@@ -343,8 +343,6 @@ footer a { color: var(--accent); }
 @media (max-width: 960px) {
   .workspace { grid-template-columns: minmax(0, 1fr); }
   .catalog {
-    position: static;
-    max-height: none;
     margin-bottom: 28px;
   }
 }
