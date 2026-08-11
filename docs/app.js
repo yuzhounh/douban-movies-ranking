@@ -265,7 +265,7 @@ elements.lastPage.addEventListener("click", () => {
   scrollToResults();
 });
 
-fetch("data/movies.json?v=20260811-4")
+fetch("data/movies.json?v=20260811-5")
   .then((response) => {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return response.json();

@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="按评分质量与评价人数对数热度综合排序的豆瓣影视条目。">
     <meta name="color-scheme" content="light dark">
-    <title>豆瓣影视综合排行榜</title>
-    <link rel="stylesheet" href="styles.css?v=20260811-4">
+    <title>豆瓣影视排行榜</title>
+    <link rel="stylesheet" href="styles.css?v=20260811-5">
   </head>
   <body>
     <header class="hero">
       <div class="hero__inner">
         <p class="eyebrow">DOUBAN MOVIES CRAWLER</p>
-        <h1>豆瓣影视综合排行榜</h1>
+        <h1>豆瓣影视排行榜</h1>
         <p class="intro">以评分质量为核心，用评价人数的自然对数衡量热度。</p>
         <div class="formula" aria-label="综合评分公式">
           <span>综合评分</span> = (<span>评分</span> − 2.5) × ln(<span>评价人数</span>)
@@ -21,64 +21,69 @@
     </header>
 
     <main class="page">
-      <section class="catalog" aria-label="排行榜分类导航">
-        <nav class="section-tabs" id="section-tabs" aria-label="主要板块"></nav>
-        <nav class="category-tabs" id="category-tabs" aria-label="板块标签"></nav>
-        <div class="filter-panel">
-          <div class="value-groups" id="value-groups" aria-label="筛选项目"></div>
-        </div>
-        <p class="selection" id="selection">正在载入分类…</p>
-      </section>
+      <div class="workspace">
+        <aside class="catalog" aria-label="排行榜分类导航">
+          <nav class="section-tabs" id="section-tabs" aria-label="主要板块"></nav>
+          <nav class="category-tabs" id="category-tabs" aria-label="板块标签"></nav>
+          <div class="filter-panel">
+            <div class="value-groups" id="value-groups" aria-label="筛选项目"></div>
+          </div>
+          <p class="selection" id="selection">正在载入分类…</p>
+        </aside>
 
-      <section class="toolbar" aria-label="排行榜筛选">
-        <div>
-          <p class="status" id="status" role="status">正在载入数据…</p>
-          <p class="updated" id="updated"></p>
-        </div>
-        <div class="controls">
-          <label class="search">
-            <span class="sr-only">搜索标题或豆瓣 ID</span>
-            <input id="search" type="search" placeholder="搜索标题或豆瓣 ID" autocomplete="off" disabled>
-          </label>
-          <label class="page-size">
-            <span>每页</span>
-            <select id="page-size" disabled>
-              <option value="25">25</option>
-              <option value="50" selected>50</option>
-              <option value="100">100</option>
-            </select>
-          </label>
-        </div>
-      </section>
+        <section class="ranking-panel" aria-label="影视排行榜列表">
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col" class="rank">排名</th>
-              <th scope="col">ID</th>
-              <th scope="col">标题</th>
-              <th scope="col" class="number">评分</th>
-              <th scope="col" class="number">评价人数</th>
-            </tr>
-          </thead>
-          <tbody id="movie-rows">
-            <tr><td colspan="5" class="message">正在载入数据…</td></tr>
-          </tbody>
-        </table>
+          <section class="toolbar" aria-label="排行榜筛选">
+            <div>
+              <p class="status" id="status" role="status">正在载入数据…</p>
+              <p class="updated" id="updated"></p>
+            </div>
+            <div class="controls">
+              <label class="search">
+                <span class="sr-only">搜索标题或豆瓣 ID</span>
+                <input id="search" type="search" placeholder="搜索标题或豆瓣 ID" autocomplete="off" disabled>
+              </label>
+              <label class="page-size">
+                <span>每页</span>
+                <select id="page-size" disabled>
+                  <option value="25">25</option>
+                  <option value="50" selected>50</option>
+                  <option value="100">100</option>
+                </select>
+              </label>
+            </div>
+          </section>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col" class="rank">排名</th>
+                  <th scope="col">ID</th>
+                  <th scope="col">标题</th>
+                  <th scope="col" class="number">评分</th>
+                  <th scope="col" class="number">评价人数</th>
+                </tr>
+              </thead>
+              <tbody id="movie-rows">
+                <tr><td colspan="5" class="message">正在载入数据…</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <nav class="pagination" aria-label="排行榜分页">
+            <button id="first-page" type="button" disabled>首页</button>
+            <button id="previous" type="button" disabled>上一页</button>
+            <label class="page-jump-label" for="page-number">第</label>
+            <input id="page-number" class="page-number" type="number" min="1" max="1" step="1" inputmode="numeric" value="1" aria-label="要跳转的页码" disabled>
+            <span class="page-jump-label">页</span>
+            <span id="page-total" class="page-total">/ 1 页</span>
+            <button id="jump-page" type="button" disabled>跳转</button>
+            <button id="next" type="button" disabled>下一页</button>
+            <button id="last-page" type="button" disabled>末页</button>
+          </nav>
+        </section>
       </div>
-
-      <nav class="pagination" aria-label="排行榜分页">
-        <button id="first-page" type="button" disabled>首页</button>
-        <button id="previous" type="button" disabled>上一页</button>
-        <label class="page-jump-label" for="page-number">第</label>
-        <input id="page-number" class="page-number" type="number" min="1" max="1" step="1" inputmode="numeric" value="1" aria-label="要跳转的页码" disabled>
-        <span class="page-jump-label">页</span>
-        <span id="page-total" class="page-total">/ 1 页</span>
-        <button id="jump-page" type="button" disabled>跳转</button>
-        <button id="next" type="button" disabled>下一页</button>
-        <button id="last-page" type="button" disabled>末页</button>
-      </nav>
     </main>
 
     <footer>
@@ -86,6 +91,6 @@
       <a href="https://github.com/yuzhounh/douban-movies-ranking">查看源代码</a>
     </footer>
 
-    <script src="app.js?v=20260811-4" defer></script>
+    <script src="app.js?v=20260811-5" defer></script>
   </body>
 </html>
