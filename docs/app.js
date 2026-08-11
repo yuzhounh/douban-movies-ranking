@@ -22,9 +22,13 @@ const elements = {
   updated: document.querySelector("#updated"),
   search: document.querySelector("#search"),
   pageSize: document.querySelector("#page-size"),
+  firstPage: document.querySelector("#first-page"),
   previous: document.querySelector("#previous"),
+  pageNumber: document.querySelector("#page-number"),
+  pageTotal: document.querySelector("#page-total"),
+  jumpPage: document.querySelector("#jump-page"),
   next: document.querySelector("#next"),
-  pageInfo: document.querySelector("#page-info"),
+  lastPage: document.querySelector("#last-page"),
 };
 
 const integerFormat = new Intl.NumberFormat("zh-CN");
@@ -193,9 +197,15 @@ function render() {
   elements.status.textContent = query
     ? `在 ${integerFormat.format(state.current.length)} 部作品中找到 ${integerFormat.format(state.filtered.length)} 部`
     : `共 ${integerFormat.format(state.current.length)} 部影视作品`;
-  elements.pageInfo.textContent = `第 ${state.page} / ${totalPages} 页`;
+  elements.pageNumber.max = String(totalPages);
+  elements.pageNumber.value = String(state.page);
+  elements.pageTotal.textContent = `/ ${totalPages} 页`;
+  elements.firstPage.disabled = state.page <= 1;
   elements.previous.disabled = state.page <= 1;
   elements.next.disabled = state.page >= totalPages;
+  elements.lastPage.disabled = state.page >= totalPages;
+  elements.pageNumber.disabled = state.filtered.length === 0;
+  elements.jumpPage.disabled = state.filtered.length === 0;
 }
 
 function applySearch() {
@@ -213,18 +223,49 @@ elements.pageSize.addEventListener("change", () => {
   state.page = 1;
   render();
 });
+
+function scrollToResults() {
+  window.scrollTo({ top: document.querySelector(".toolbar").offsetTop, behavior: "smooth" });
+}
+
+function jumpToPage() {
+  const totalPages = Math.max(1, Math.ceil(state.filtered.length / state.pageSize));
+  const requestedPage = Number.parseInt(elements.pageNumber.value, 10);
+  if (!Number.isFinite(requestedPage)) {
+    elements.pageNumber.value = String(state.page);
+    return;
+  }
+  state.page = Math.min(totalPages, Math.max(1, requestedPage));
+  render();
+  scrollToResults();
+}
+
+elements.firstPage.addEventListener("click", () => {
+  state.page = 1;
+  render();
+  scrollToResults();
+});
 elements.previous.addEventListener("click", () => {
   state.page -= 1;
   render();
-  window.scrollTo({ top: document.querySelector(".toolbar").offsetTop, behavior: "smooth" });
+  scrollToResults();
+});
+elements.jumpPage.addEventListener("click", jumpToPage);
+elements.pageNumber.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") jumpToPage();
 });
 elements.next.addEventListener("click", () => {
   state.page += 1;
   render();
-  window.scrollTo({ top: document.querySelector(".toolbar").offsetTop, behavior: "smooth" });
+  scrollToResults();
+});
+elements.lastPage.addEventListener("click", () => {
+  state.page = Math.max(1, Math.ceil(state.filtered.length / state.pageSize));
+  render();
+  scrollToResults();
 });
 
-fetch("data/movies.json?v=20260811-3")
+fetch("data/movies.json?v=20260811-4")
   .then((response) => {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return response.json();

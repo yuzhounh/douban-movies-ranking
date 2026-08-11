@@ -231,8 +231,22 @@ tbody tr[data-url]:focus-visible {
 .rating { color: var(--accent); font-weight: 800; }
 .message { padding: 48px 16px; color: var(--muted); text-align: center; }
 
-.pagination { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 22px; }
-#page-info { min-width: 110px; color: var(--muted); text-align: center; }
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+.page-jump-label,
+.page-total { color: var(--muted); white-space: nowrap; }
+.page-number {
+  width: 78px;
+  padding-inline: 10px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
 
 footer {
   display: flex;

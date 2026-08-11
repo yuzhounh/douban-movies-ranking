@@ -6,7 +6,7 @@
     <meta name="description" content="按评分质量与评价人数对数热度综合排序的豆瓣影视条目。">
     <meta name="color-scheme" content="light dark">
     <title>豆瓣影视综合排行榜</title>
-    <link rel="stylesheet" href="styles.css?v=20260811-3">
+    <link rel="stylesheet" href="styles.css?v=20260811-4">
   </head>
   <body>
     <header class="hero">
@@ -69,9 +69,15 @@
       </div>
 
       <nav class="pagination" aria-label="排行榜分页">
+        <button id="first-page" type="button" disabled>首页</button>
         <button id="previous" type="button" disabled>上一页</button>
-        <span id="page-info">第 1 / 1 页</span>
+        <label class="page-jump-label" for="page-number">第</label>
+        <input id="page-number" class="page-number" type="number" min="1" max="1" step="1" inputmode="numeric" value="1" aria-label="要跳转的页码" disabled>
+        <span class="page-jump-label">页</span>
+        <span id="page-total" class="page-total">/ 1 页</span>
+        <button id="jump-page" type="button" disabled>跳转</button>
         <button id="next" type="button" disabled>下一页</button>
+        <button id="last-page" type="button" disabled>末页</button>
       </nav>
     </main>
 
@@ -80,6 +86,6 @@
       <a href="https://github.com/yuzhounh/douban-movies-ranking">查看源代码</a>
     </footer>
 
-    <script src="app.js?v=20260811-3" defer></script>
+    <script src="app.js?v=20260811-4" defer></script>
   </body>
 </html>
