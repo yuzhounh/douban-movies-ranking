@@ -218,7 +218,7 @@ elements.next.addEventListener("click", () => {
   window.scrollTo({ top: document.querySelector(".toolbar").offsetTop, behavior: "smooth" });
 });
 
-fetch("data/movies.json?v=20260811-1")
+fetch("data/movies.json?v=20260811-2")
   .then((response) => {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return response.json();

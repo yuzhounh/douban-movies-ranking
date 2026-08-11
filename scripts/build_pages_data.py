@@ -21,12 +21,9 @@ TAB_ORDER = {
         "类型": 1,
         "地区": 2,
         "年代": 3,
-        "排序": 4,
-        "标签": 5,
-        "热门电影": 6,
-        "最新电影": 7,
-        "豆瓣高分": 8,
-        "冷门佳片": 9,
+        "标签": 4,
+        "豆瓣高分": 5,
+        "冷门佳片": 6,
     },
     "选剧集": {
         "全部": 0,
@@ -34,11 +31,45 @@ TAB_ORDER = {
         "地区": 2,
         "年代": 3,
         "平台": 4,
-        "排序": 5,
-        "标签": 6,
-        "最近热门剧集": 7,
-        "最近热门综艺": 8,
+        "标签": 5,
     },
+}
+
+HIDDEN_TABS = {
+    "选电影": {"排序", "热门电影", "最新电影"},
+    "选剧集": {"排序", "最近热门剧集", "最近热门综艺"},
+}
+
+DECADE_LABELS = {
+    "90年代": "1990年代",
+    "80年代": "1980年代",
+    "70年代": "1970年代",
+    "60年代": "1960年代",
+}
+
+YEAR_ORDER = {
+    value: order
+    for order, value in enumerate(
+        (
+            "全部",
+            "2020年代",
+            "2026",
+            "2025",
+            "2024",
+            "2023",
+            "2022",
+            "2021",
+            "2020",
+            "2019",
+            "2010年代",
+            "2000年代",
+            "1990年代",
+            "1980年代",
+            "1970年代",
+            "1960年代",
+            "更早",
+        )
+    )
 }
 
 
@@ -72,6 +103,11 @@ def _map_navigation(navigation: dict) -> tuple[str, str, str | None, str] | None
             tab = old_filter
         else:
             tab = old_tab
+        if tab in HIDDEN_TABS[section]:
+            return None
+        value = DECADE_LABELS.get(value, value)
+        if section == "选剧集" and tab == "类型" and value == "不限类型":
+            value = "全部"
         return section, tab, group, value
 
     if section == "分类排行榜":
@@ -126,6 +162,21 @@ def build_payload(records: list[dict], summary: dict) -> dict:
             "order": -1,
         }
 
+    # 类型排行榜新增一个三级“全部”，聚合该二级榜单的全部作品。
+    category_type_members: set[int] = set()
+    for leaf in leaves.values():
+        if leaf["section"] == "分类排行榜" and leaf["tab"] == "类型排行榜":
+            category_type_members.update(leaf["members"])
+    if category_type_members:
+        leaves[("分类排行榜", "类型排行榜", None, "全部")] = {
+            "section": "分类排行榜",
+            "tab": "类型排行榜",
+            "group": None,
+            "value": "全部",
+            "members": category_type_members,
+            "order": -1,
+        }
+
     # 任何现有的三级“全部”都改为当前二级标签全部叶子的并集。
     tab_members: dict[tuple[str, str], set[int]] = defaultdict(set)
     for leaf in leaves.values():
@@ -141,13 +192,26 @@ def build_payload(records: list[dict], summary: dict) -> dict:
             SECTION_ORDER.get(section, 99),
             TAB_ORDER.get(section, {}).get(tab, 99),
         )
+        value = leaf["value"]
+        count = len(leaf["members"])
         if section == "分类排行榜":
-            return (*base, -len(leaf["members"]), leaf["value"])
-        return (
-            *base,
-            0 if leaf["value"] == "全部" else 1,
-            leaf["order"],
-        )
+            return (*base, 0 if value == "全部" else 1, -count, value)
+        if tab == "年代":
+            return (*base, YEAR_ORDER.get(value, 999), value)
+        if section == "选电影":
+            return (*base, 0 if value == "全部" else 1, -count, value)
+        if section == "选剧集" and tab == "类型":
+            group_order = {"全部": 0, "电视剧": 1, "综艺": 2}
+            return (
+                *base,
+                group_order.get(leaf["group"], 99),
+                0 if value == "全部" else 1,
+                -count,
+                value,
+            )
+        if section == "选剧集" and tab in {"地区", "标签"}:
+            return (*base, 0 if value == "全部" else 1, -count, value)
+        return (*base, 0 if value == "全部" else 1, leaf["order"])
 
     ordered_leaves = sorted(leaves.values(), key=leaf_sort_key)
     navigation = []
