@@ -134,6 +134,51 @@ def test_decades_are_normalized_and_years_use_chronological_order() -> None:
     assert values == ["全部", "2020年代", "2010年代", "1990年代", "1980年代", "更早"]
 
 
+def test_2020_decade_follows_individual_years() -> None:
+    records = [
+        _record("1", ["all"]),
+        _record("2", ["year_2026"]),
+        _record("3", ["year_2019"]),
+        _record("4", ["decade_2020"]),
+        _record("5", ["decade_2010"]),
+    ]
+    summary = {
+        "sources": [
+            _source("all", "选剧集", "全部", "年代", "全部"),
+            _source("decade_2020", "选剧集", "全部", "年代", "2020年代"),
+            _source("year_2026", "选剧集", "全部", "年代", "2026"),
+            _source("year_2019", "选剧集", "全部", "年代", "2019"),
+            _source("decade_2010", "选剧集", "全部", "年代", "2010年代"),
+        ]
+    }
+
+    values = [
+        item["value"]
+        for item in build_payload(records, summary)["navigation"]
+        if item["section"] == "选剧集" and item["tab"] == "年代"
+    ]
+    assert values == ["全部", "2026", "2019", "2020年代", "2010年代"]
+
+
+def test_empty_movie_tags_are_removed() -> None:
+    records = [_record("1", ["nonempty_tag"])]
+    summary = {
+        "sources": [
+            _source("nonempty_tag", "选电影", "全部", "标签", "推理", "推荐标签"),
+            _source("empty_tag", "选电影", "全部", "标签", "空标签", "推荐标签"),
+        ]
+    }
+
+    payload = build_payload(records, summary)
+    values = [
+        item["value"]
+        for item in payload["navigation"]
+        if item["section"] == "选电影" and item["tab"] == "标签"
+    ]
+    assert values == ["推理"]
+    assert payload["formula"] == "综合评分 = (评分 - 2.5) * ln(评价人数)"
+
+
 def test_movie_values_and_tv_requested_groups_are_sorted_by_count() -> None:
     records = [
         _record("1", ["movie_a", "movie_b", "tv_all", "tv_drama", "tv_cn", "tv_tag_a"]),

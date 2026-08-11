@@ -6,7 +6,7 @@
     <meta name="description" content="按评分质量与评价人数对数热度综合排序的豆瓣影视条目。">
     <meta name="color-scheme" content="light dark">
     <title>豆瓣影视综合排行榜</title>
-    <link rel="stylesheet" href="styles.css?v=20260811-2">
+    <link rel="stylesheet" href="styles.css?v=20260811-3">
   </head>
   <body>
     <header class="hero">
@@ -15,7 +15,7 @@
         <h1>豆瓣影视综合排行榜</h1>
         <p class="intro">以评分质量为核心，用评价人数的自然对数衡量热度。</p>
         <div class="formula" aria-label="综合评分公式">
-          <span>score</span> = (<span>R</span> − 2.5) × ln(<span>v</span>)
+          <span>综合评分</span> = (<span>评分</span> − 2.5) × ln(<span>评价人数</span>)
         </div>
       </div>
     </header>
@@ -80,6 +80,6 @@
       <a href="https://github.com/yuzhounh/douban-movies-ranking">查看源代码</a>
     </footer>
 
-    <script src="app.js?v=20260811-2" defer></script>
+    <script src="app.js?v=20260811-3" defer></script>
   </body>
 </html>

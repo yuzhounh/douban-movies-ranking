@@ -73,7 +73,7 @@ python -m douban_movies --refresh
 采用与豆瓣读书项目相同的质量与对数热度综合评分：
 
 ```text
-score = (R - delta) * ln(v)
+综合评分 = (评分 - delta) * ln(评价人数)
 ```
 
 - `R`：豆瓣评分

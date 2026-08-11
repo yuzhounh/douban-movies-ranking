@@ -121,6 +121,12 @@ function renderNavigation() {
     buttons.className = "value-buttons";
     sourceIndexes.forEach((sourceIndex) => {
       const source = state.navigation[sourceIndex];
+      if (source.tab === "年代" && source.value === "2020年代") {
+        const rowBreak = document.createElement("span");
+        rowBreak.className = "value-row-break";
+        rowBreak.setAttribute("aria-hidden", "true");
+        buttons.append(rowBreak);
+      }
       buttons.append(makeButton(source.value, sourceIndex === state.selectedSource, () => {
         state.selectedSource = sourceIndex;
         updateSelection();
@@ -218,7 +224,7 @@ elements.next.addEventListener("click", () => {
   window.scrollTo({ top: document.querySelector(".toolbar").offsetTop, behavior: "smooth" });
 });
 
-fetch("data/movies.json?v=20260811-2")
+fetch("data/movies.json?v=20260811-3")
   .then((response) => {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return response.json();

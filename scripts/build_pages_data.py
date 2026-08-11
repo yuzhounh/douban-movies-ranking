@@ -52,7 +52,6 @@ YEAR_ORDER = {
     for order, value in enumerate(
         (
             "全部",
-            "2020年代",
             "2026",
             "2025",
             "2024",
@@ -61,6 +60,7 @@ YEAR_ORDER = {
             "2021",
             "2020",
             "2019",
+            "2020年代",
             "2010年代",
             "2000年代",
             "1990年代",
@@ -134,6 +134,8 @@ def build_payload(records: list[dict], summary: dict) -> dict:
         section_members[navigation["section"]].update(members)
         mapped = _map_navigation(navigation)
         if mapped is None:
+            continue
+        if mapped[0] == "选电影" and mapped[1] == "标签" and not members:
             continue
         leaf = leaves.setdefault(
             mapped,
@@ -242,7 +244,7 @@ def build_payload(records: list[dict], summary: dict) -> dict:
     ]
     return {
         "generated_at": records[0].get("crawled_at") if records else None,
-        "formula": "score = (R - 2.5) * ln(v)",
+        "formula": "综合评分 = (评分 - 2.5) * ln(评价人数)",
         "count": len(movies),
         "navigation": navigation,
         "movies": movies,

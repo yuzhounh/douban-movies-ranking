@@ -145,6 +145,10 @@ h1 {
   background: var(--surface-strong);
   font-weight: 600;
 }
+.value-row-break {
+  flex-basis: 100%;
+  height: 0;
+}
 .value-button small {
   color: var(--muted);
   font-size: .7rem;
