@@ -10,12 +10,6 @@ GitHub Pages 按“分类排行榜、选电影、选剧集”三个一级板块�
 
 在线展示页面：<https://yuzhounh.github.io/douban-movies-ranking/>
 
-抓取完成后，可用下面的命令从最终 JSON 重新生成网页数据：
-
-```powershell
-python scripts/build_pages_data.py
-```
-
 ## 数据规模
 
 最近一次完整抓取（2026-08-10）得到 153,850 条原始记录，按豆瓣 subject ID 去重后为 **51,970 部影视作品**；其中 **51,940 部带有分类，覆盖率 99.94%**。
@@ -66,6 +60,12 @@ python -m douban_movies --max-pages 2 --delay 1 --jitter 0.5
 
 ```powershell
 python -m douban_movies --refresh
+```
+
+抓取完成后，可用下面的命令从最终 JSON 重新生成网页数据：
+
+```powershell
+python scripts/build_pages_data.py
 ```
 
 ## 综合评分
