@@ -19,3 +19,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+================================================================================
+DATA DISCLAIMER & FAIR USE NOTICE:
+The MIT License above applies exclusively to the software code, scrapers, data processing, and visualization scripts developed in this repository.
+
+All third-party data, book/movie/music metadata, ratings, reviews, rankings, and media assets fetched or processed by these scripts remain the copyrighted property of their respective rights holders and original platforms (including Douban, NetEase Cloud Music, Kuwo Music, etc.).
+
+These materials are collected strictly for educational, research, and non-commercial personal analysis under fair use principles. The author makes no claim of ownership over third-party data and grants no commercial rights for such content.
