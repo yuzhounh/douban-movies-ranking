@@ -1,5 +1,7 @@
 # 豆瓣影视综合排行榜
 
+[![Code License: MIT](https://img.shields.io/badge/Code%20License-MIT-D4A017.svg)](LICENSE)
+
 从公开的豆瓣影视豆列、分类排行榜、Top 250、“选电影”和“选剧集”中采集条目 **ID、评分、评价人数、分类**，去重后计算综合评分并排序，输出 CSV 和 JSON。
 
 > 使用前请确认你的使用方式符合豆瓣网站条款与当地法律。程序默认低频请求，不绕过验证码；电影和剧集筛选最多并发 3 个相互独立的请求。如果出现验证页，请停止运行、降低并发数或延长间隔后再试。
@@ -10,9 +12,9 @@ GitHub Pages 按“分类排行榜、选电影、选剧集”三个一级板块�
 
 在线展示页面：<https://yuzhounh.github.io/douban-movies-ranking/>
 
-## 数据规模
+## 数据快照
 
-最近一次完整抓取（2026-08-10）得到 153,850 条原始记录，按豆瓣 subject ID 去重后为 **51,970 部影视作品**；其中 **51,940 部带有分类，覆盖率 99.94%**。
+本仓库记录的完整抓取快照（2026-08-10）得到 153,850 条原始记录，按豆瓣 subject ID 去重后为 **51,970 部影视作品**；其中 **51,940 部带有分类，覆盖率 99.94%**。
 
 ## 默认数据源
 
@@ -36,7 +38,8 @@ GitHub Pages 按“分类排行榜、选电影、选剧集”三个一级板块�
 需要 Python 3.10 或更高版本。
 
 ```powershell
-cd "E:\Archives\20260809 Douban Movies"
+git clone https://github.com/yuzhounh/douban-movies-ranking.git
+cd douban-movies-ranking
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
@@ -70,7 +73,7 @@ python scripts/build_pages_data.py
 
 ## 综合评分
 
-采用与豆瓣读书项目相同的质量与对数热度综合评分：
+采用与[豆瓣读书综合排行榜](https://github.com/yuzhounh/douban-books-ranking)相同的质量与对数热度综合评分：
 
 ```text
 综合评分 = (评分 - delta) * ln(评价人数)
@@ -128,3 +131,11 @@ python -m douban_movies --delta 2.5
 python -m pip install -r requirements-dev.txt
 python -m pytest -q
 ```
+
+## 相关项目
+
+- [douban-books-ranking](https://github.com/yuzhounh/douban-books-ranking)：较新的独立 Python 读书采集与在线排行榜项目；图书与影视分别采集和发布，使用相同的评分思路。
+
+## 许可证
+
+代码采用 [MIT 许可证](LICENSE)。MIT 授权范围为代码；第三方数据的权利归原平台和权利人，具体说明见 [LICENSE 中的数据声明](LICENSE)。
