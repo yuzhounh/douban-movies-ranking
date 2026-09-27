@@ -1,3 +1,5 @@
 {
-  "outputDirectory": "docs"
+  "framework": null,
+  "outputDirectory": "docs",
+  "cleanUrls": true
 }
