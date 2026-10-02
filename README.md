@@ -1,6 +1,16 @@
-# 豆瓣影视综合排行榜
+# Douban Movies Ranking · 豆瓣影视排行
 
-[![Code License: MIT](https://img.shields.io/badge/Code%20License-MIT-D4A017.svg)](LICENSE)
+> 汇集豆瓣公开影视榜单，去重并按评分与热度综合排序。
+
+<p>
+  <a href="https://douban-movies-ranking.pages.dev/"><img src="https://img.shields.io/badge/Website-Cloudflare%20Pages-f38020?style=flat&amp;logo=cloudflare&amp;logoColor=white" alt="Website: Cloudflare Pages"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/Code%20license-MIT-f59e0b?style=flat" alt="Code license: MIT"></a>
+  <img src="https://img.shields.io/badge/Python-3-3776ab?style=flat&amp;logo=python&amp;logoColor=white" alt="Python: 3">
+</p>
+
+<p>
+  <a href="https://douban-movies-ranking.pages.dev/">在线体验</a> · <a href="#安装与运行">快速开始</a> · <a href="LICENSE">开源协议</a>
+</p>
 
 从公开的豆瓣影视豆列、分类排行榜、Top 250、“选电影”和“选剧集”中采集条目 **ID、评分、评价人数、分类**，去重后计算综合评分并排序，输出 CSV 和 JSON。
 
@@ -8,7 +18,7 @@
 
 ## 在线排行榜
 
-GitHub Pages 按“分类排行榜、选电影、选剧集”三个一级板块展示数据，并依次使用二级类别和三级标签继续筛选。“全部”会对当前一级板块或二级类别中的作品去重汇总；“分类排行榜”中的三级标签按作品数量从多到少排列，Top 250 作为其中的独立榜单。表格展示排序后的豆瓣ID、标题、评分和评价人数，点击任意影视条目所在行即可打开对应豆瓣页面，并支持分类内搜索与分页。
+在线页面按“分类排行榜、选电影、选剧集”三个一级板块展示数据，并依次使用二级类别和三级标签继续筛选。“全部”会对当前一级板块或二级类别中的作品去重汇总；“分类排行榜”中的三级标签按作品数量从多到少排列，Top 250 作为其中的独立榜单。表格展示排序后的豆瓣ID、标题、评分和评价人数，点击任意影视条目所在行即可打开对应豆瓣页面，并支持分类内搜索与分页。
 
 在线展示页面：<https://douban-movies-ranking.pages.dev/>
 
@@ -136,6 +146,6 @@ python -m pytest -q
 
 - [douban-books-ranking](https://github.com/yuzhounh/douban-books-ranking)：较新的独立 Python 读书采集与在线排行榜项目；图书与影视分别采集和发布，使用相同的评分思路。
 
-## 许可证
+## 开源协议
 
 代码采用 [MIT 许可证](LICENSE)。MIT 授权范围为代码；第三方数据的权利归原平台和权利人，具体说明见 [LICENSE 中的数据声明](LICENSE)。
