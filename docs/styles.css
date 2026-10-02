@@ -342,6 +342,25 @@ footer a { color: var(--accent); }
   .search { flex: 1; }
   input { width: 100%; }
   th, td { padding: 12px; }
+  input, select { min-height: 44px; font-size: 16px; }
+  button { min-height: 44px; }
+  .catalog .category-button, .catalog .value-button { min-height: 44px; }
+  .controls { flex-wrap: wrap; }
+  .table-wrap { overflow: visible; }
+  table, tbody { display: block; width: 100%; }
+  thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  tbody tr { display: grid; grid-template-columns: 32px minmax(0, 1fr) auto; gap: 8px; padding: 14px 12px; border-bottom: 1px solid var(--line); }
+  td { min-width: 0 !important; padding: 0; border: 0; overflow-wrap: anywhere; }
+  td.rank { grid-column: 1; grid-row: 1; width: auto; }
+  td.title { grid-column: 2 / -1; grid-row: 1; }
+  td.id { grid-column: 2 / -1; grid-row: 3; }
+  td.id::before { content: 'ID '; }
+  td.rating { grid-column: 2; grid-row: 2; text-align: left; }
+  td.rating::before { content: '评分 '; color: var(--muted); }
+  td.number:last-child { grid-column: 3; grid-row: 2; }
+  td.number:last-child::after { content: ' 人评价'; color: var(--muted); }
+  td.message { grid-column: 1 / -1; padding: 24px 0; }
+  .pagination #first-page, .pagination #last-page { display: none; }
   footer { flex-direction: column; }
 }
 
@@ -350,6 +369,7 @@ footer a { color: var(--accent); }
   .catalog {
     margin-bottom: 28px;
   }
+  .category-tabs { max-height: min(42dvh, 300px); overflow-y: auto; overscroll-behavior: contain; }
 }
 
 @media (prefers-color-scheme: dark) {
