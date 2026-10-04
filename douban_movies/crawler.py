@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import logging
 import random
 import time
@@ -98,7 +99,14 @@ class DoubanCrawler:
         ):
             raise ParseError("豆瓣返回了验证或异常请求页面；该页面未写入缓存")
         cache_path.parent.mkdir(parents=True, exist_ok=True)
-        cache_path.write_text(html, encoding="utf-8")
+        temp_path = cache_path.with_name(f"{cache_path.name}.tmp.{os.getpid()}")
+        try:
+            temp_path.write_text(html, encoding="utf-8")
+            temp_path.replace(cache_path)
+        except BaseException:
+            if temp_path.exists():
+                temp_path.unlink(missing_ok=True)
+            raise
         return html
 
     def _get_html(self, source: DoulistSource, url: str) -> str:

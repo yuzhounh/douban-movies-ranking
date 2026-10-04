@@ -6,3 +6,4 @@ output/*.csv
 output/*.json
 output/cache/
 !output/.gitkeep
+.vercel
