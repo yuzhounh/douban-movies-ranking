@@ -372,6 +372,19 @@ footer a { color: var(--accent); }
   .category-tabs { max-height: min(42dvh, 300px); overflow-y: auto; overscroll-behavior: contain; }
 }
 
+@media (min-width: 744px) and (min-height: 600px) and (pointer: coarse) {
+  button, input, select { min-height: 44px; }
+  input, select { font-size: 16px; }
+}
+
+@media (min-width: 744px) and (max-width: 960px) and (min-height: 600px) and (pointer: coarse) {
+  .catalog .value-buttons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+  .catalog .value-button { padding: 8px; gap: 4px; flex-wrap: wrap; }
+  .toolbar { flex-wrap: wrap; }
+  .controls { flex-wrap: wrap; }
+  .search { min-width: 0; }
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #171a17;
