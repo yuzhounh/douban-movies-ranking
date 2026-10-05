@@ -9,6 +9,159 @@
     <link rel="stylesheet" href="styles.css?v=20261002-1">
   </head>
   <body>
+    <nav class="site-navbar" aria-label="全局导航">
+      <div class="navbar-inner">
+        <a class="navbar-brand" href="./" aria-label="豆瓣影视排行榜首页">
+          <svg class="brand-logo" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+            <line x1="7" y1="2" x2="7" y2="22"></line>
+            <line x1="17" y1="2" x2="17" y2="22"></line>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <line x1="2" y1="7" x2="7" y2="7"></line>
+            <line x1="2" y1="17" x2="7" y2="17"></line>
+            <line x1="17" y1="17" x2="22" y2="17"></line>
+            <line x1="17" y1="7" x2="22" y2="7"></line>
+          </svg>
+          <span class="brand-title">豆瓣影视排行榜</span>
+        </a>
+        <div class="navbar-actions">
+          <button type="button" id="theme-toggle-btn" class="navbar-action-btn theme-toggle" aria-label="切换外观主题" title="切换外观主题 (D)">
+            <svg id="theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg id="theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+          <a href="https://github.com/yuzhounh/douban-movies-ranking" target="_blank" rel="noopener noreferrer" class="navbar-action-btn github-link" aria-label="GitHub 源代码" title="GitHub 源代码">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+            </svg>
+          </a>
+          <button type="button" id="mobile-drawer-toggle" class="mobile-drawer-toggle" aria-label="打开导航与设置菜单" title="打开导航与设置菜单">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- 移动端侧滑抽屉菜单 -->
+    <div id="mobile-drawer-layer" class="mobile-drawer-layer" hidden role="presentation">
+      <div id="mobile-drawer-backdrop" class="mobile-drawer-backdrop"></div>
+      <aside class="mobile-drawer-panel" role="dialog" aria-modal="true" aria-label="快捷设置与导航">
+        <div class="mobile-drawer-head">
+          <div class="drawer-brand">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);">
+              <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+              <line x1="7" y1="2" x2="7" y2="22"></line>
+              <line x1="17" y1="2" x2="17" y2="22"></line>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <line x1="2" y1="7" x2="7" y2="7"></line>
+              <line x1="2" y1="17" x2="7" y2="17"></line>
+              <line x1="17" y1="17" x2="22" y2="17"></line>
+              <line x1="17" y1="7" x2="22" y2="7"></line>
+            </svg>
+            <span>豆瓣影视</span>
+          </div>
+          <button type="button" id="mobile-drawer-close" class="mobile-drawer-close" aria-label="关闭菜单">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="mobile-drawer-body">
+          <div class="mobile-menu-section">
+            <span class="mobile-menu-section-title">板块分类</span>
+            <nav class="mobile-nav-list" id="mobile-section-nav" aria-label="移动端板块分类"></nav>
+          </div>
+
+          <div class="mobile-menu-section">
+            <span class="mobile-menu-section-title">快捷操作</span>
+            <nav class="mobile-nav-list">
+              <button type="button" class="mobile-nav-item" id="mobileDrawerSearch">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <span>搜索榜单条目</span>
+              </button>
+              <button type="button" class="mobile-nav-item" id="mobileDrawerFormula">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>评分规则说明</span>
+              </button>
+            </nav>
+          </div>
+        </div>
+
+        <div class="mobile-drawer-foot">
+          <div class="mobile-foot-row">
+            <span class="mobile-foot-label">外观主题</span>
+            <button type="button" id="mobile-theme-toggle" class="mobile-drawer-action-btn" aria-label="切换外观主题" title="切换外观主题">
+              <svg id="drawer-theme-icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <svg id="drawer-theme-icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none;">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="mobile-foot-row">
+            <span class="mobile-foot-label">开源项目</span>
+            <a href="https://github.com/yuzhounh/douban-movies-ranking" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--accent);text-decoration:none;font-weight:600;">
+              <span>GitHub</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+            </a>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- 评分公式弹窗 -->
+    <div id="formula-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="formulaModalTitle">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title" id="formulaModalTitle">
+            <span>📐 综合评分公式与规则</span>
+          </div>
+          <button type="button" id="closeFormulaModal" class="modal-close-x" aria-label="关闭公式说明" title="关闭">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="formula-box">
+            <span>综合评分</span> = (<span>评分</span> − 2.5) × ln(<span>评价人数</span>)
+          </div>
+          <p><strong>计算原理与设计初衷：</strong></p>
+          <ul style="margin: 8px 0 0 18px; padding: 0;">
+            <li><strong>质量基准</strong>：将评分基准设为 2.5 分，突出有效好评价值。</li>
+            <li><strong>对数热度</strong>：通过评价人数的自然对数（ln）收敛超高热度条目的权重，防止唯人数论。</li>
+            <li><strong>兼顾小众与经典</strong>：使高质量冷门佳作与大样本热门神作在同一坐标系下合理排列。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <header class="hero">
       <div class="hero__inner">
         <p class="eyebrow">DOUBAN MOVIES ARCHIVE</p>

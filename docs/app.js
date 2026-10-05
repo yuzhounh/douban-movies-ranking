@@ -321,3 +321,155 @@ fetch("data/movies.json?v=20260811-7")
     row.append(cell);
     elements.rows.replaceChildren(row);
   });
+
+
+// ---- 主题切换系统与移动端抽屉控制器 ----
+const themeToggleBtn = document.getElementById("theme-toggle-btn");
+const mobileThemeToggle = document.getElementById("mobile-theme-toggle");
+const drawerLayer = document.getElementById("mobile-drawer-layer");
+const drawerToggle = document.getElementById("mobile-drawer-toggle");
+const drawerClose = document.getElementById("mobile-drawer-close");
+const drawerBackdrop = document.getElementById("mobile-drawer-backdrop");
+const formulaModal = document.getElementById("formula-modal");
+const closeFormulaModalBtn = document.getElementById("closeFormulaModal");
+const mobileDrawerFormula = document.getElementById("mobileDrawerFormula");
+const mobileDrawerSearch = document.getElementById("mobileDrawerSearch");
+const mobileSectionNav = document.getElementById("mobile-section-nav");
+
+function getStoredTheme() {
+  const saved = localStorage.getItem("douban_movies_theme");
+  if (saved === "dark" || saved === "light") return saved;
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function applyTheme(theme) {
+  const isDark = theme === "dark";
+  document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+  try {
+    localStorage.setItem("douban_movies_theme", theme);
+  } catch (_) {}
+
+  const navSun = document.getElementById("theme-icon-sun");
+  const navMoon = document.getElementById("theme-icon-moon");
+  if (navSun) navSun.style.display = isDark ? "none" : "inline-block";
+  if (navMoon) navMoon.style.display = isDark ? "inline-block" : "none";
+
+  const drawerSun = document.getElementById("drawer-theme-icon-sun");
+  const drawerMoon = document.getElementById("drawer-theme-icon-moon");
+  if (drawerSun) drawerSun.style.display = isDark ? "none" : "inline-block";
+  if (drawerMoon) drawerMoon.style.display = isDark ? "inline-block" : "none";
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute("data-theme") || getStoredTheme();
+  applyTheme(current === "dark" ? "light" : "dark");
+}
+
+applyTheme(getStoredTheme());
+
+if (themeToggleBtn) themeToggleBtn.addEventListener("click", toggleTheme);
+if (mobileThemeToggle) mobileThemeToggle.addEventListener("click", toggleTheme);
+
+function openDrawer() {
+  if (drawerLayer) {
+    drawerLayer.removeAttribute("hidden");
+    drawerLayer.hidden = false;
+    document.body.style.overflow = "hidden";
+    renderMobileSections();
+  }
+}
+
+function closeDrawer() {
+  if (drawerLayer) {
+    drawerLayer.setAttribute("hidden", "");
+    drawerLayer.hidden = true;
+    document.body.style.overflow = "";
+  }
+}
+
+if (drawerToggle) drawerToggle.addEventListener("click", openDrawer);
+if (drawerClose) drawerClose.addEventListener("click", closeDrawer);
+if (drawerBackdrop) drawerBackdrop.addEventListener("click", closeDrawer);
+
+window.addEventListener("keydown", (e) => {
+  const isInputActive = ["INPUT", "SELECT", "TEXTAREA"].includes(document.activeElement?.tagName);
+  if ((e.key === "d" || e.key === "D") && !isInputActive) {
+    e.preventDefault();
+    toggleTheme();
+  } else if (e.key === "Escape") {
+    if (formulaModal && !formulaModal.hidden) {
+      closeFormulaModal();
+    } else if (drawerLayer && !drawerLayer.hidden) {
+      closeDrawer();
+    }
+  }
+});
+
+function openFormulaModal() {
+  if (formulaModal) {
+    formulaModal.removeAttribute("hidden");
+    formulaModal.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function closeFormulaModal() {
+  if (formulaModal) {
+    formulaModal.setAttribute("hidden", "");
+    formulaModal.hidden = true;
+    document.body.style.overflow = "";
+  }
+}
+
+if (closeFormulaModalBtn) closeFormulaModalBtn.addEventListener("click", closeFormulaModal);
+if (formulaModal) {
+  formulaModal.addEventListener("click", (e) => {
+    if (e.target === formulaModal) closeFormulaModal();
+  });
+}
+if (mobileDrawerFormula) {
+  mobileDrawerFormula.addEventListener("click", () => {
+    closeDrawer();
+    openFormulaModal();
+  });
+}
+if (mobileDrawerSearch) {
+  mobileDrawerSearch.addEventListener("click", () => {
+    closeDrawer();
+    if (elements.search) {
+      elements.search.focus();
+      elements.search.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+}
+
+function renderMobileSections() {
+  if (!mobileSectionNav || !state.tree || state.tree.size === 0) return;
+  mobileSectionNav.replaceChildren();
+  state.tree.forEach((_, section) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "mobile-nav-item";
+    if (section === state.selectedSection) btn.classList.add("is-active");
+    btn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg>
+      <span>${section}</span>
+    `;
+    btn.addEventListener("click", () => {
+      state.selectedSection = section;
+      state.selectedTab = state.tree.get(section).keys().next().value;
+      state.expandedTab = state.selectedTab;
+      state.selectedSource = -1;
+      updateSelection();
+      closeDrawer();
+    });
+    mobileSectionNav.append(btn);
+  });
+}
+
+function checkNavbarWrap() {
+  const isNarrow = window.innerWidth <= 720;
+  document.body.classList.toggle("header-collapsed", isNarrow);
+}
+window.addEventListener("resize", checkNavbarWrap);
+checkNavbarWrap();
