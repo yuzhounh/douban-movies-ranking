@@ -84,9 +84,9 @@
         </div>
 
         <div class="mobile-drawer-body">
-          <div class="mobile-menu-section">
-            <span class="mobile-menu-section-title">板块分类</span>
-            <nav class="mobile-nav-list" id="mobile-section-nav" aria-label="移动端板块分类"></nav>
+          <div class="mobile-menu-section drawer-catalog-section">
+            <span class="mobile-menu-section-title">分类筛选</span>
+            <div id="drawer-catalog-slot" class="drawer-catalog-slot"></div>
           </div>
 
           <div class="mobile-menu-section">
@@ -175,13 +175,26 @@
 
     <main class="page">
       <div class="workspace">
-        <aside class="catalog" aria-label="排行榜分类导航">
-          <nav class="section-tabs" id="section-tabs" aria-label="主要板块"></nav>
-          <div class="category-tabs" id="category-tabs" aria-label="板块标签"></div>
-          <p class="selection" id="selection">正在载入分类…</p>
-        </aside>
+        <div id="desktop-catalog-slot" class="desktop-catalog-slot">
+          <aside class="catalog" id="catalog" aria-label="排行榜分类导航">
+            <nav class="section-tabs" id="section-tabs" aria-label="主要板块"></nav>
+            <div class="category-tabs" id="category-tabs" aria-label="板块标签"></div>
+            <p class="selection" id="selection">正在载入分类…</p>
+          </aside>
+        </div>
 
         <section class="ranking-panel" aria-label="影视排行榜列表">
+
+          <div class="mobile-filter-bar" id="mobileFilterBar">
+            <div class="mobile-filter-info">
+              <span class="mobile-filter-label">当前榜单：</span>
+              <span class="mobile-filter-val" id="mobileCurrentSelection">正在载入分类…</span>
+            </div>
+            <button type="button" class="mobile-filter-btn" id="openDrawerFromFilter" aria-label="打开板块分类筛选">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+              <span>切换榜单</span>
+            </button>
+          </div>
 
           <section class="toolbar" aria-label="排行榜筛选">
             <div>

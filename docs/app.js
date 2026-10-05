@@ -147,6 +147,9 @@ function renderNavigation() {
           const valueButton = makeButton(source.value, sourceIndex === state.selectedSource, () => {
             state.selectedSource = sourceIndex;
             updateSelection();
+            if (window.innerWidth <= 960 && typeof closeDrawer === "function") {
+              closeDrawer();
+            }
           }, "value-button", state.moviesBySource[sourceIndex].length);
           if (source.section === "分类排行榜" && source.tab === "精选豆列") {
             valueButton.classList.add("is-truncated");
@@ -172,6 +175,8 @@ function updateSelection() {
   const path = [source.section, source.tab, source.group, source.value]
     .filter((part, index, values) => part && values.indexOf(part) === index);
   elements.selection.textContent = path.join(" / ");
+  const mobileSel = document.getElementById("mobileCurrentSelection");
+  if (mobileSel) mobileSel.textContent = path.join(" / ");
   state.page = 1;
   applySearch();
 }
@@ -473,3 +478,31 @@ function checkNavbarWrap() {
 }
 window.addEventListener("resize", checkNavbarWrap);
 checkNavbarWrap();
+
+
+// 动态响应式转移 Catalog 导航节点（桌面端放入左侧侧边栏，移动端放入侧滑抽屉）
+function syncCatalogPlacement() {
+  const isMobile = window.innerWidth <= 960;
+  const desktopSlot = document.getElementById("desktop-catalog-slot");
+  const drawerSlot = document.getElementById("drawer-catalog-slot");
+  const catalog = document.getElementById("catalog");
+  if (!catalog || !desktopSlot || !drawerSlot) return;
+
+  if (isMobile) {
+    if (drawerSlot.firstElementChild !== catalog) {
+      drawerSlot.appendChild(catalog);
+    }
+  } else {
+    if (desktopSlot.firstElementChild !== catalog) {
+      desktopSlot.appendChild(catalog);
+    }
+  }
+}
+
+window.addEventListener("resize", syncCatalogPlacement);
+syncCatalogPlacement();
+
+const openDrawerFromFilter = document.getElementById("openDrawerFromFilter");
+if (openDrawerFromFilter) {
+  openDrawerFromFilter.addEventListener("click", openDrawer);
+}

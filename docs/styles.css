@@ -578,7 +578,7 @@ body.header-collapsed .mobile-drawer-toggle svg {
 .mobile-drawer-panel {
   position: relative;
   z-index: 10;
-  width: min(72vw, 248px) !important;
+  width: min(86vw, 286px) !important;
   height: 100% !important;
   background: var(--surface);
   border-left: 1px solid var(--line);
@@ -850,4 +850,197 @@ body.header-collapsed .mobile-drawer-toggle svg {
 .modal-body .formula-box span {
   color: var(--accent);
   font-weight: 700;
+}
+
+
+/* 移动端当前榜单快捷触发栏 */
+.mobile-filter-bar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--shadow) 40%, transparent);
+}
+.mobile-filter-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mobile-filter-label {
+  color: var(--muted);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.mobile-filter-val {
+  font-weight: 600;
+  color: var(--accent);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mobile-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all .15s ease;
+}
+.mobile-filter-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.mobile-filter-btn svg {
+  color: var(--accent);
+}
+
+@media (max-width: 960px) {
+  .mobile-filter-bar {
+    display: flex;
+  }
+  .desktop-catalog-slot {
+    display: none !important;
+  }
+  .workspace {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+}
+
+/* 抽屉内部嵌入的 Catalog 样式优化 */
+.drawer-catalog-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.drawer-catalog-slot {
+  flex: 1;
+  overflow-y: auto;
+}
+.drawer-catalog-slot .catalog {
+  position: static;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  margin-bottom: 0;
+  overflow: visible;
+}
+.drawer-catalog-slot .section-tabs {
+  position: static;
+  top: auto;
+  border: none;
+  background: transparent;
+  padding: 0 0 10px 0;
+  display: flex;
+  gap: 4px;
+}
+.drawer-catalog-slot .section-button {
+  flex: 1;
+  min-height: 34px;
+  height: 34px;
+  padding: 0 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--muted);
+  box-sizing: border-box;
+}
+.drawer-catalog-slot .section-button.is-active {
+  border-color: var(--accent);
+  background: var(--surface-strong);
+  color: var(--accent);
+  font-weight: 700;
+}
+.drawer-catalog-slot .category-tabs {
+  max-height: none;
+  overflow-y: visible;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.drawer-catalog-slot .category-item {
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  overflow: hidden;
+}
+.drawer-catalog-slot .category-item + .category-item {
+  border-top: 1px solid var(--line);
+}
+.drawer-catalog-slot .category-button {
+  width: 100%;
+  min-height: 38px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  background: transparent;
+}
+.drawer-catalog-slot .category-button.is-active {
+  color: var(--accent);
+}
+.drawer-catalog-slot .accordion-values {
+  padding: 8px 10px 10px;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+.drawer-catalog-slot .value-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.drawer-catalog-slot .value-button {
+  width: 100%;
+  min-height: 32px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  color: var(--text);
+  border: 1px solid transparent;
+  box-sizing: border-box;
+}
+.drawer-catalog-slot .value-button:hover,
+.drawer-catalog-slot .value-button.is-active {
+  border-color: var(--accent);
+  background: var(--surface-strong);
+  color: var(--accent);
+  font-weight: 600;
+}
+.drawer-catalog-slot .selection {
+  margin: 8px 2px 2px;
+  font-size: 11px;
+  color: var(--muted);
 }
