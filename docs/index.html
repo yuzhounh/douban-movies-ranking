@@ -84,14 +84,13 @@
         </div>
 
         <div class="mobile-drawer-body">
-          <div class="mobile-menu-section drawer-catalog-section">
-            <span class="mobile-menu-section-title">分类筛选</span>
-            <div id="drawer-catalog-slot" class="drawer-catalog-slot"></div>
-          </div>
-
           <div class="mobile-menu-section">
-            <span class="mobile-menu-section-title">快捷操作</span>
+            <span class="mobile-menu-section-title">功能导航</span>
             <nav class="mobile-nav-list">
+              <button type="button" class="mobile-nav-item" id="mobileDrawerSwitchList">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+                <span>切换榜单与分类</span>
+              </button>
               <button type="button" class="mobile-nav-item" id="mobileDrawerSearch">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 <span>搜索榜单条目</span>
@@ -133,6 +132,29 @@
           </div>
         </div>
       </aside>
+    </div>
+
+    <!-- 专职切换榜单弹出卡片 -->
+    <div id="switch-list-modal" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="switchListModalTitle">
+      <div class="modal-card switch-list-card">
+        <div class="modal-header">
+          <div class="modal-title" id="switchListModalTitle">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent);">
+              <path d="M4 6h16M7 12h10M10 18h4"/>
+            </svg>
+            <span>切换榜单与分类</span>
+          </div>
+          <button type="button" id="closeSwitchListModal" class="modal-close-x" aria-label="关闭切换榜单" title="关闭">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="modal-body switch-list-body">
+          <div id="modal-catalog-slot"></div>
+        </div>
+      </div>
     </div>
 
     <!-- 评分公式弹窗 -->

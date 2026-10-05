@@ -578,7 +578,7 @@ body.header-collapsed .mobile-drawer-toggle svg {
 .mobile-drawer-panel {
   position: relative;
   z-index: 10;
-  width: min(86vw, 286px) !important;
+  width: min(72vw, 248px) !important;
   height: 100% !important;
   background: var(--surface);
   border-left: 1px solid var(--line);
@@ -1042,5 +1042,124 @@ body.header-collapsed .mobile-drawer-toggle svg {
 .drawer-catalog-slot .selection {
   margin: 8px 2px 2px;
   font-size: 11px;
+  color: var(--muted);
+}
+
+
+/* 专职切换榜单卡片样式 */
+.switch-list-card {
+  max-width: 500px !important;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  padding: 20px !important;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+.switch-list-body {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 2px;
+}
+#modal-catalog-slot .catalog {
+  position: static;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0;
+  margin-bottom: 0;
+}
+#modal-catalog-slot .section-tabs {
+  position: static;
+  top: auto;
+  border: none;
+  background: transparent;
+  padding: 0 0 10px 0;
+  display: flex;
+  gap: 6px;
+}
+#modal-catalog-slot .section-button {
+  flex: 1;
+  min-height: 38px;
+  height: 38px;
+  padding: 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--muted);
+  box-sizing: border-box;
+}
+#modal-catalog-slot .section-button.is-active {
+  border-color: var(--accent);
+  background: var(--surface-strong);
+  color: var(--accent);
+  font-weight: 700;
+}
+#modal-catalog-slot .category-tabs {
+  max-height: none;
+  overflow-y: visible;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+#modal-catalog-slot .category-item {
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  overflow: hidden;
+}
+#modal-catalog-slot .category-button {
+  width: 100%;
+  min-height: 40px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+  background: transparent;
+}
+#modal-catalog-slot .category-button.is-active {
+  color: var(--accent);
+}
+#modal-catalog-slot .accordion-values {
+  padding: 8px 12px 12px;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+#modal-catalog-slot .value-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 4px;
+}
+#modal-catalog-slot .value-button {
+  min-height: 34px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--line);
+  box-sizing: border-box;
+}
+#modal-catalog-slot .value-button:hover,
+#modal-catalog-slot .value-button.is-active {
+  border-color: var(--accent);
+  background: var(--surface-strong);
+  color: var(--accent);
+  font-weight: 600;
+}
+#modal-catalog-slot .selection {
+  margin: 10px 4px 4px;
+  font-size: 12px;
   color: var(--muted);
 }

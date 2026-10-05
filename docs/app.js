@@ -147,8 +147,8 @@ function renderNavigation() {
           const valueButton = makeButton(source.value, sourceIndex === state.selectedSource, () => {
             state.selectedSource = sourceIndex;
             updateSelection();
-            if (window.innerWidth <= 960 && typeof closeDrawer === "function") {
-              closeDrawer();
+            if (window.innerWidth <= 960 && typeof closeSwitchListModal === "function") {
+              closeSwitchListModal();
             }
           }, "value-button", state.moviesBySource[sourceIndex].length);
           if (source.section === "分类排行榜" && source.tab === "精选豆列") {
@@ -402,7 +402,9 @@ window.addEventListener("keydown", (e) => {
     e.preventDefault();
     toggleTheme();
   } else if (e.key === "Escape") {
-    if (formulaModal && !formulaModal.hidden) {
+    if (switchListModal && !switchListModal.hidden) {
+      closeSwitchListModal();
+    } else if (formulaModal && !formulaModal.hidden) {
       closeFormulaModal();
     } else if (drawerLayer && !drawerLayer.hidden) {
       closeDrawer();
@@ -480,17 +482,55 @@ window.addEventListener("resize", checkNavbarWrap);
 checkNavbarWrap();
 
 
-// 动态响应式转移 Catalog 导航节点（桌面端放入左侧侧边栏，移动端放入侧滑抽屉）
+// 专职切换榜单弹出卡片控制器
+const switchListModal = document.getElementById("switch-list-modal");
+const closeSwitchListModalBtn = document.getElementById("closeSwitchListModal");
+const openDrawerFromFilter = document.getElementById("openDrawerFromFilter");
+const mobileDrawerSwitchList = document.getElementById("mobileDrawerSwitchList");
+
+function openSwitchListModal() {
+  if (switchListModal) {
+    switchListModal.removeAttribute("hidden");
+    switchListModal.hidden = false;
+    document.body.style.overflow = "hidden";
+  }
+}
+
+function closeSwitchListModal() {
+  if (switchListModal) {
+    switchListModal.setAttribute("hidden", "");
+    switchListModal.hidden = true;
+    document.body.style.overflow = "";
+  }
+}
+
+if (closeSwitchListModalBtn) closeSwitchListModalBtn.addEventListener("click", closeSwitchListModal);
+if (switchListModal) {
+  switchListModal.addEventListener("click", (e) => {
+    if (e.target === switchListModal) closeSwitchListModal();
+  });
+}
+if (openDrawerFromFilter) {
+  openDrawerFromFilter.addEventListener("click", openSwitchListModal);
+}
+if (mobileDrawerSwitchList) {
+  mobileDrawerSwitchList.addEventListener("click", () => {
+    closeDrawer();
+    openSwitchListModal();
+  });
+}
+
+// 动态响应式转移 Catalog 导航节点（桌面端放入左侧侧边栏，移动端放入专职切榜弹窗）
 function syncCatalogPlacement() {
   const isMobile = window.innerWidth <= 960;
   const desktopSlot = document.getElementById("desktop-catalog-slot");
-  const drawerSlot = document.getElementById("drawer-catalog-slot");
+  const modalSlot = document.getElementById("modal-catalog-slot");
   const catalog = document.getElementById("catalog");
-  if (!catalog || !desktopSlot || !drawerSlot) return;
+  if (!catalog || !desktopSlot || !modalSlot) return;
 
   if (isMobile) {
-    if (drawerSlot.firstElementChild !== catalog) {
-      drawerSlot.appendChild(catalog);
+    if (modalSlot.firstElementChild !== catalog) {
+      modalSlot.appendChild(catalog);
     }
   } else {
     if (desktopSlot.firstElementChild !== catalog) {
@@ -501,8 +541,3 @@ function syncCatalogPlacement() {
 
 window.addEventListener("resize", syncCatalogPlacement);
 syncCatalogPlacement();
-
-const openDrawerFromFilter = document.getElementById("openDrawerFromFilter");
-if (openDrawerFromFilter) {
-  openDrawerFromFilter.addEventListener("click", openDrawer);
-}
