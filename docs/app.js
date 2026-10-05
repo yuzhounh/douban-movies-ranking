@@ -101,7 +101,7 @@ function renderNavigation() {
     const active = tab === state.selectedTab;
     const expanded = tab === state.expandedTab;
     const item = document.createElement("section");
-    item.className = "category-item";
+    item.className = tab === "精选豆列" ? "category-item is-doulist-category" : "category-item";
     const tabButton = makeButton(tab, active, () => {
       if (expanded) {
         state.expandedTab = "";
