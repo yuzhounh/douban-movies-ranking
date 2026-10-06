@@ -208,10 +208,20 @@ function render() {
           openMovie(movie.url);
         }
       });
+      const titleCell = document.createElement("td");
+      titleCell.className = "title";
+      const titleText = document.createElement("span");
+      titleText.className = "movie-title-text";
+      titleText.textContent = movie.title;
+      const idSpan = document.createElement("span");
+      idSpan.className = "inline-id";
+      idSpan.textContent = `ID ${movie.id}`;
+      titleCell.append(titleText, idSpan);
+
       row.append(
         makeCell("rank", integerFormat.format(start + index + 1)),
         makeCell("id", movie.id),
-        makeCell("title", movie.title),
+        titleCell,
         makeCell("number rating", Number(movie.rating).toFixed(1)),
         makeCell("number", integerFormat.format(movie.rating_count)),
       );

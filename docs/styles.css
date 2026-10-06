@@ -355,6 +355,10 @@ footer a { color: var(--accent); }
   border: 0;
 }
 
+.inline-id {
+  display: none;
+}
+
 @media (max-width: 720px) {
   .hero__inner { padding: 44px 0 38px; }
   .page { width: min(100% - 20px, 1180px); }
@@ -375,7 +379,7 @@ footer a { color: var(--accent); }
   thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
   tbody tr {
     display: grid;
-    grid-template-columns: minmax(24px, auto) auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(24px, auto) 1fr auto;
     column-gap: 10px;
     row-gap: 5px;
     padding: 10px 12px;
@@ -398,6 +402,18 @@ footer a { color: var(--accent); }
     font-weight: 600;
     line-height: 1.4;
   }
+  .inline-id {
+    display: inline;
+    margin-left: 6px;
+    font-size: 12px;
+    font-weight: normal;
+    color: var(--muted);
+    vertical-align: baseline;
+    font-variant-numeric: tabular-nums;
+  }
+  td.id {
+    display: none !important;
+  }
   td.rating {
     grid-column: 2;
     grid-row: 2;
@@ -407,17 +423,8 @@ footer a { color: var(--accent); }
     font-size: 13.5px;
   }
   td.rating::before { content: '评分 '; color: var(--muted); font-size: 13px; font-weight: normal; }
-  td.id {
-    grid-column: 3;
-    grid-row: 2;
-    color: var(--muted);
-    font-size: 12.5px;
-    white-space: nowrap;
-    align-self: center;
-  }
-  td.id::before { content: 'ID '; }
   td.number:last-child {
-    grid-column: 4;
+    grid-column: 3;
     grid-row: 2;
     text-align: right;
     white-space: nowrap;
