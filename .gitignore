@@ -7,3 +7,5 @@ output/*.json
 output/cache/
 !output/.gitkeep
 .vercel
+.firebase/
+.wrangler/
