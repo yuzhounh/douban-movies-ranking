@@ -12,3 +12,8 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -r requirements-dev.txt
       - run: python -m pytest tests -p no:cacheprovider
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test --test-concurrency=2 tests/data-store.test.mjs
+      - run: python scripts/verify_pages_shards.py

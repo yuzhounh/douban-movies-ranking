@@ -1,0 +1,18 @@
+{
+  "original_sha256": "ce28beae94c03307e4b1242b4249e2b3024438be43412c2e7cf4682e997f8dd4",
+  "movies": 51970,
+  "lists": 225,
+  "memberships_verified_in_order": 248532,
+  "legacy_bytes": 8085398,
+  "first_page_json_bytes": 54441,
+  "first_page_files": [
+    "manifest.json",
+    "chunks/source.668ed51956f44180.json",
+    "chunks/page.00c4f36642932480.json"
+  ],
+  "search_index_bytes": 1682357,
+  "default_membership_bytes": 217902,
+  "shard_files": 2997,
+  "shard_json_bytes": 35073907,
+  "note": "Uncompressed file bytes, not measured network transfer, heap, latency or energy. Pages intentionally duplicate cross-list display rows; legacy full payload retained."
+}

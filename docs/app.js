@@ -1,10 +1,11 @@
+import { MovieData } from "./data-store.mjs?v=20261023-2";
+
+const data = new MovieData();
 const state = {
-  all: [],
   navigation: [],
   tree: new Map(),
-  moviesBySource: [],
-  current: [],
-  filtered: [],
+  currentCount: 0,
+  filtered: null,
   selectedSection: "",
   selectedTab: "",
   expandedTab: "",
@@ -32,6 +33,37 @@ const elements = {
 };
 
 const integerFormat = new Intl.NumberFormat("zh-CN");
+let searchRequest = 0;
+let renderRequest = 0;
+let queryPending = false;
+let searchTimer;
+let composing = false;
+
+function totalRows() {
+  return state.filtered === null ? state.currentCount : state.filtered.length;
+}
+
+function pending(message = "正在载入排行榜…") {
+  elements.status.textContent = message;
+  elements.rows.setAttribute("aria-busy", "true");
+  const row = document.createElement("tr");
+  const cell = makeCell("message", message);
+  cell.colSpan = 5;
+  row.append(cell);
+  elements.rows.replaceChildren(row);
+  [elements.firstPage, elements.previous, elements.next, elements.lastPage,
+    elements.pageNumber, elements.jumpPage].forEach(button => { button.disabled = true; });
+}
+
+function showError(error, retry) {
+  pending(`无法载入排行榜数据：${error.message}`);
+  elements.rows.removeAttribute("aria-busy");
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = "重试";
+  button.addEventListener("click", retry);
+  elements.rows.querySelector("td").append(" ", button);
+}
 
 function makeCell(className, text) {
   const cell = document.createElement("td");
@@ -150,7 +182,7 @@ function renderNavigation() {
             if (window.innerWidth <= 960 && typeof closeSwitchListModal === "function") {
               closeSwitchListModal();
             }
-          }, "value-button", state.moviesBySource[sourceIndex].length);
+          }, "value-button", source.count);
           if (source.section === "分类排行榜" && source.tab === "精选豆列") {
             valueButton.classList.add("is-truncated");
             valueButton.title = source.value;
@@ -171,7 +203,7 @@ function updateSelection() {
   selectFirstSource();
   renderNavigation();
   const source = state.navigation[state.selectedSource];
-  state.current = state.moviesBySource[state.selectedSource] || [];
+  state.currentCount = source.count;
   const path = [source.section, source.tab, source.group, source.value]
     .filter((part, index, values) => part && values.indexOf(part) === index);
   elements.selection.textContent = path.join(" / ");
@@ -181,11 +213,24 @@ function updateSelection() {
   applySearch();
 }
 
-function render() {
-  const totalPages = Math.max(1, Math.ceil(state.filtered.length / state.pageSize));
+async function render() {
+  if (queryPending) return;
+  const request = ++renderRequest;
+  const queryRequest = searchRequest;
+  const isCurrent = () => request === renderRequest && queryRequest === searchRequest;
+  const total = totalRows();
+  const totalPages = Math.max(1, Math.ceil(total / state.pageSize));
   state.page = Math.min(state.page, totalPages);
   const start = (state.page - 1) * state.pageSize;
-  const visible = state.filtered.slice(start, start + state.pageSize);
+  pending();
+  let visible;
+  try {
+    visible = await data.page(state.selectedSource, state.filtered, start, state.pageSize, isCurrent);
+  } catch (error) {
+    if (isCurrent()) showError(error, render);
+    return;
+  }
+  if (!isCurrent()) return;
   const fragment = document.createDocumentFragment();
 
   if (visible.length === 0) {
@@ -230,10 +275,11 @@ function render() {
   }
 
   elements.rows.replaceChildren(fragment);
+  elements.rows.removeAttribute("aria-busy");
   const query = elements.search.value.trim();
   elements.status.textContent = query
-    ? `在 ${integerFormat.format(state.current.length)} 部作品中找到 ${integerFormat.format(state.filtered.length)} 部`
-    : `共 ${integerFormat.format(state.current.length)} 部影视作品`;
+    ? `在 ${integerFormat.format(state.currentCount)} 部作品中找到 ${integerFormat.format(total)} 部`
+    : `共 ${integerFormat.format(state.currentCount)} 部影视作品`;
   elements.pageNumber.max = String(totalPages);
   elements.pageNumber.value = String(state.page);
   elements.pageTotal.textContent = `/ ${totalPages} 页`;
@@ -241,20 +287,48 @@ function render() {
   elements.previous.disabled = state.page <= 1;
   elements.next.disabled = state.page >= totalPages;
   elements.lastPage.disabled = state.page >= totalPages;
-  elements.pageNumber.disabled = state.filtered.length === 0;
-  elements.jumpPage.disabled = state.filtered.length === 0;
+  elements.pageNumber.disabled = total === 0;
+  elements.jumpPage.disabled = total === 0;
 }
 
-function applySearch() {
+async function applySearch() {
+  clearTimeout(searchTimer);
+  const request = ++searchRequest;
+  renderRequest += 1;
+  queryPending = true;
   const query = elements.search.value.trim().toLocaleLowerCase("zh-CN");
-  state.filtered = query
-    ? state.current.filter((movie) => movie.id.includes(query) || movie.title.toLocaleLowerCase("zh-CN").includes(query))
-    : state.current;
-  state.page = 1;
-  render();
+  pending(query ? "正在检索当前榜单…" : "正在载入排行榜…");
+  try {
+    const positions = await data.search(state.selectedSource, query);
+    if (request !== searchRequest) return;
+    state.filtered = positions;
+    state.page = 1;
+    queryPending = false;
+    render();
+  } catch (error) {
+    if (request !== searchRequest) return;
+    showError(error, applySearch);
+  }
 }
 
-elements.search.addEventListener("input", applySearch);
+function scheduleSearch() {
+  clearTimeout(searchTimer);
+  searchRequest += 1;
+  renderRequest += 1;
+  queryPending = true;
+  pending("正在检索当前榜单…");
+  searchTimer = setTimeout(applySearch, 120);
+}
+elements.search.addEventListener("compositionstart", () => {
+  composing = true;
+  clearTimeout(searchTimer);
+  searchRequest += 1;
+  renderRequest += 1;
+  queryPending = true;
+  pending("正在检索当前榜单…");
+});
+elements.search.addEventListener("compositionend", () => { composing = false; scheduleSearch(); });
+elements.search.addEventListener("input", () => { if (!composing) scheduleSearch(); });
 elements.pageSize.addEventListener("change", () => {
   state.pageSize = Number(elements.pageSize.value);
   state.page = 1;
@@ -266,7 +340,7 @@ function scrollToResults() {
 }
 
 function jumpToPage() {
-  const totalPages = Math.max(1, Math.ceil(state.filtered.length / state.pageSize));
+  const totalPages = Math.max(1, Math.ceil(totalRows() / state.pageSize));
   const requestedPage = Number.parseInt(elements.pageNumber.value, 10);
   if (!Number.isFinite(requestedPage)) {
     elements.pageNumber.value = String(state.page);
@@ -297,25 +371,16 @@ elements.next.addEventListener("click", () => {
   scrollToResults();
 });
 elements.lastPage.addEventListener("click", () => {
-  state.page = Math.max(1, Math.ceil(state.filtered.length / state.pageSize));
+  state.page = Math.max(1, Math.ceil(totalRows() / state.pageSize));
   render();
   scrollToResults();
 });
 
-fetch("data/movies.json?v=20260811-7")
-  .then((response) => {
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return response.json();
-  })
+function loadData() {
+  pending();
+  data.init()
   .then((payload) => {
-    state.all = payload.movies;
     state.navigation = payload.navigation;
-    state.moviesBySource = state.navigation.map(() => []);
-    state.all.forEach((movie) => {
-      movie.sources.forEach((sourceIndex) => {
-        if (state.moviesBySource[sourceIndex]) state.moviesBySource[sourceIndex].push(movie);
-      });
-    });
     buildTree();
     state.selectedSection = state.tree.keys().next().value;
     state.selectedTab = state.tree.get(state.selectedSection).keys().next().value;
@@ -329,13 +394,10 @@ fetch("data/movies.json?v=20260811-7")
     updateSelection();
   })
   .catch((error) => {
-    elements.status.textContent = "数据载入失败";
-    const row = document.createElement("tr");
-    const cell = makeCell("message", `无法载入排行榜数据：${error.message}`);
-    cell.colSpan = 5;
-    row.append(cell);
-    elements.rows.replaceChildren(row);
+    showError(error, loadData);
   });
+}
+loadData();
 
 
 // ---- 主题切换系统与移动端抽屉控制器 ----

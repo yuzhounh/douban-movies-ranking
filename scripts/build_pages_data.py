@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from collections import defaultdict
 from pathlib import Path
@@ -251,6 +252,45 @@ def build_payload(records: list[dict], summary: dict) -> dict:
     }
 
 
+def write_shards(payload: dict, output: Path) -> dict:
+    """Package the existing ranking; never crawl, rerank or change its records."""
+    directory = output.parent
+    chunks = directory / "chunks"
+    chunks.mkdir(parents=True, exist_ok=True)
+
+    def write_chunk(kind: str, value: object) -> str:
+        content = json.dumps(value, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        name = f"{kind}.{hashlib.sha256(content).hexdigest()[:16]}.json"
+        target = chunks / name
+        if not target.exists() or target.read_bytes() != content:
+            target.write_bytes(content)
+        return f"chunks/{name}"
+
+    members: list[list[int]] = [[] for _ in payload["navigation"]]
+    records = []
+    search = []
+    for index, movie in enumerate(payload["movies"]):
+        records.append({key: value for key, value in movie.items() if key != "sources"})
+        search.append([movie["id"], movie["title"]])
+        for source in movie["sources"]:
+            members[source].append(index)
+    navigation = []
+    for source, indexes in zip(payload["navigation"], members):
+        if source["count"] != len(indexes):
+            raise ValueError("Navigation count differs from actual membership")
+        pages = [write_chunk("page", [records[i] for i in indexes[start:start + 100]])
+                 for start in range(0, len(indexes), 100)]
+        descriptor = {"count": len(indexes), "pages": pages,
+                      "index": write_chunk("members", indexes)}
+        navigation.append({**source, "data": write_chunk("source", descriptor)})
+    manifest = {key: payload[key] for key in ("generated_at", "formula", "count")}
+    manifest.update({"format": 1, "page_size": 100, "navigation": navigation,
+                     "search": write_chunk("search", search)})
+    (directory / "manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    return manifest
+
+
 def main() -> None:
     args = parse_args()
     records = json.loads(args.input.read_text(encoding="utf-8"))
@@ -261,6 +301,7 @@ def main() -> None:
         json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
         encoding="utf-8",
     )
+    write_shards(payload, args.output)
     print(
         f"Wrote {payload['count']:,} records and "
         f"{len(payload['navigation']):,} navigation entries to {args.output}"
