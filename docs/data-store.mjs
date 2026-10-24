@@ -1,8 +1,9 @@
 // Shared by desktop and mobile. Full titles/IDs are requested only for a search.
 export class MovieData {
-  constructor(base = "data/", fetcher = (url, options) => fetch(url, options)) {
+  constructor(base = "data/", fetcher = (url, options) => fetch(url, options), { timeoutMs = 30_000 } = {}) {
     this.base = base;
     this.fetcher = fetcher;
+    this.timeoutMs = timeoutMs;
     this.caches = { source: new Map(), members: new Map(), page: new Map() };
     this.pending = new Map();
     this.active = 0;
@@ -12,11 +13,31 @@ export class MovieData {
   async json(name, options) {
     if (this.active >= 3) await new Promise(resolve => this.waiters.push(resolve));
     else this.active += 1;
+    // Each physical request owns its deadline; all shared readers keep the same
+    // result, and a stalled response body cannot hold a download slot forever.
+    const controller = new AbortController();
+    const forwardAbort = () => controller.abort(options.signal.reason);
+    if (options?.signal?.aborted) forwardAbort();
+    else options?.signal?.addEventListener("abort", forwardAbort, { once: true });
+    let timer;
     try {
-      const response = await this.fetcher(this.base + name, options);
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return await response.json();
+      const timeout = new Promise((_, reject) => {
+        timer = setTimeout(() => {
+          const error = new Error("读取排行榜超时，请重试");
+          error.name = "TimeoutError";
+          reject(error);
+          controller.abort(error);
+        }, this.timeoutMs);
+      });
+      const read = async () => {
+        const response = await this.fetcher(this.base + name, { ...options, signal: controller.signal });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
+      };
+      return await Promise.race([read(), timeout]);
     } finally {
+      clearTimeout(timer);
+      options?.signal?.removeEventListener("abort", forwardAbort);
       const next = this.waiters.shift();
       if (next) next();
       else this.active -= 1;

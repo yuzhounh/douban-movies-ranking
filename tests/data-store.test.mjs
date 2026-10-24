@@ -66,3 +66,39 @@ test('simultaneous page reads share requests; failed reads retry; stale work sto
   assert.deepEqual(await store.page(0, null, 200, 50, () => false), []);
   assert.equal(requests.length, count);
 });
+
+for (const phase of ['fetch', 'body']) {
+  test(`a stalled ${phase} times out, releases queued downloads and allows shared readers to retry`, async () => {
+    const attempts = new Map(), signals = [], dispatched = [];
+    const store = new MovieData('', async (name, { signal }) => {
+      dispatched.push(name);
+      assert.ok(store.active <= 3);
+      const attempt = (attempts.get(name) || 0) + 1;
+      attempts.set(name, attempt);
+      if (name !== 'ready' && attempt === 1) {
+        signals.push(signal);
+        const stalled = new Promise(() => {});
+        if (phase === 'fetch') return stalled;
+        return { ok: true, json: () => stalled };
+      }
+      return { ok: true, json: async () => [name] };
+    }, { timeoutMs: 40 });
+
+    const blocked = ['a', 'b', 'c'].map(name => store.cached('page', name, 8));
+    const shared = store.cached('page', 'a', 8);
+    const ready = store.cached('page', 'ready', 8);
+    assert.deepEqual(dispatched, ['a', 'b', 'c']);
+    const results = await Promise.allSettled([...blocked, shared, ready]);
+    for (const result of results.slice(0, 4)) {
+      assert.equal(result.status, 'rejected');
+      assert.equal(result.reason.name, 'TimeoutError');
+    }
+    assert.deepEqual(results[4], { status: 'fulfilled', value: ['ready'] });
+    assert.ok(signals.every(signal => signal.aborted));
+    assert.equal(attempts.get('a'), 1);
+    assert.equal(store.pending.size, 0);
+    assert.equal(store.active, 0);
+    assert.deepEqual(await store.cached('page', 'a', 8), ['a']);
+    assert.equal(attempts.get('a'), 2);
+  });
+}
